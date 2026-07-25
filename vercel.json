@@ -20,7 +20,8 @@
     ],
     "env": {
         "APP_ENV": "production",
-        "APP_DEBUG": "false",
+        "APP_DEBUG": "true",
+        "APP_KEY": "base64:6VsVtSBXUN9rM0dJp3zELxNy27yUNPuej1FntusqH+s=",
         "APP_CONFIG_CACHE": "/tmp/config.php",
         "APP_EVENTS_CACHE": "/tmp/events.php",
         "APP_PACKAGES_CACHE": "/tmp/packages.php",
@@ -29,6 +30,8 @@
         "VIEW_COMPILED_PATH": "/tmp/views",
         "CACHE_STORE": "array",
         "SESSION_DRIVER": "cookie",
-        "LOG_CHANNEL": "stderr"
+        "LOG_CHANNEL": "stderr",
+        "DB_CONNECTION": "sqlite",
+        "DB_DATABASE": "/tmp/database.sqlite"
     }
 }

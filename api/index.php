@@ -14,5 +14,11 @@ foreach ($directories as $dir) {
     }
 }
 
+// Ensure SQLite database file exists in /tmp
+$sqlitePath = '/tmp/database.sqlite';
+if (!file_exists($sqlitePath)) {
+    @touch($sqlitePath);
+}
+
 // Forward Vercel requests to public/index.php
 require __DIR__ . '/../public/index.php';
