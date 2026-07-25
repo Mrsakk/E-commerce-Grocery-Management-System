@@ -1,5 +1,12 @@
 <?php
 
+use Illuminate\Foundation\Application;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Schema;
+
+define('LARAVEL_START', microtime(true));
+
 // Create required writable storage directories in /tmp for Vercel's read-only environment
 $directories = [
     '/tmp/views',
@@ -20,5 +27,27 @@ if (!file_exists($sqlitePath)) {
     @touch($sqlitePath);
 }
 
-// Forward Vercel requests to public/index.php
-require __DIR__ . '/../public/index.php';
+// Register Composer autoloader
+require __DIR__ . '/../vendor/autoload.php';
+
+// Bootstrap Laravel
+/** @var Application $app */
+$app = require_once __DIR__ . '/../bootstrap/app.php';
+
+// Auto-run migrations & seeders on Vercel if SQLite database is fresh/missing tables
+try {
+    if (!Schema::hasTable('users') || !Schema::hasTable('banners')) {
+        Artisan::call('migrate', ['--force' => true]);
+        Artisan::call('db:seed', ['--force' => true]);
+    }
+} catch (\Throwable $e) {
+    try {
+        Artisan::call('migrate', ['--force' => true]);
+        Artisan::call('db:seed', ['--force' => true]);
+    } catch (\Throwable $ex) {
+        error_log('Vercel Migration Exception: ' . $ex->getMessage());
+    }
+}
+
+// Handle the HTTP request
+$app->handleRequest(Request::capture());
