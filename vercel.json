@@ -5,7 +5,8 @@
     "outputDirectory": "public",
     "functions": {
         "api/index.php": {
-            "runtime": "vercel-php@0.7.3"
+            "runtime": "vercel-php@0.7.3",
+            "maxDuration": 30
         }
     },
     "routes": [
@@ -19,19 +20,18 @@
         }
     ],
     "env": {
+        "APP_NAME": "FreshMart",
         "APP_ENV": "production",
-        "APP_DEBUG": "true",
-        "APP_KEY": "base64:6VsVtSBXUN9rM0dJp3zELxNy27yUNPuej1FntusqH+s=",
+        "APP_DEBUG": "false",
         "APP_CONFIG_CACHE": "/tmp/config.php",
         "APP_EVENTS_CACHE": "/tmp/events.php",
         "APP_PACKAGES_CACHE": "/tmp/packages.php",
         "APP_ROUTES_CACHE": "/tmp/routes.php",
         "APP_SERVICES_CACHE": "/tmp/services.php",
-        "VIEW_COMPILED_PATH": "/tmp/views",
+        "VIEW_COMPILED_PATH": "/tmp/framework/views",
         "CACHE_STORE": "array",
         "SESSION_DRIVER": "cookie",
         "LOG_CHANNEL": "stderr",
-        "DB_CONNECTION": "sqlite",
-        "DB_DATABASE": "/tmp/database.sqlite"
+        "FILESYSTEM_DISK": "local"
     }
 }
