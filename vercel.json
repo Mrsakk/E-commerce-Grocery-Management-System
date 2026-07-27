@@ -1,7 +1,7 @@
 {
     "version": 2,
     "framework": null,
-    "buildCommand": "npm run build",
+    "buildCommand": "composer install --no-dev --optimize-autoloader && php artisan migrate --force && npm run build",
     "outputDirectory": "public",
     "functions": {
         "api/index.php": {
@@ -21,7 +21,6 @@
     "env": {
         "APP_ENV": "production",
         "APP_DEBUG": "false",
-        "APP_KEY": "base64:6VsVtSBXUN9rM0dJp3zELxNy27yUNPuej1FntusqH+s=",
         "APP_URL": "https://e-commerce-grocery-management-syste.vercel.app",
         "APP_CONFIG_CACHE": "/tmp/config.php",
         "APP_EVENTS_CACHE": "/tmp/events.php",
@@ -31,13 +30,6 @@
         "VIEW_COMPILED_PATH": "/tmp/views",
         "CACHE_STORE": "array",
         "SESSION_DRIVER": "cookie",
-        "LOG_CHANNEL": "stderr",
-        "DB_CONNECTION": "pgsql",
-        "DB_HOST": "ep-aged-glade-aw7jxgua-pooler.c-12.us-east-1.aws.neon.tech",
-        "DB_PORT": "5432",
-        "DB_DATABASE": "neondb",
-        "DB_USERNAME": "neondb_owner",
-        "DB_PASSWORD": "npg_DykmTz1qoM4Q",
-        "DB_SSLMODE": "require"
+        "LOG_CHANNEL": "stderr"
     }
 }

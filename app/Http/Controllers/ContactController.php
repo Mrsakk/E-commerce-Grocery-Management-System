@@ -31,12 +31,16 @@ class ContactController extends Controller
 
         $message = ContactMessage::create($request->only(['name', 'email', 'subject', 'message']));
 
-        NotificationService::notifyAdmins(
-            'New Contact Message: '.e($message->subject),
-            e($message->name).' ('.e($message->email).') sent: '.e($message->message),
-            'contact_message',
-            $message->id
-        );
+        try {
+            NotificationService::notifyAdmins(
+                'New Contact Message: '.e($message->subject),
+                e($message->name).' ('.e($message->email).') sent: '.e($message->message),
+                'contact_message',
+                $message->id
+            );
+        } catch (\Exception $e) {
+            \Log::warning('Failed to notify admins about contact message: '.$e->getMessage());
+        }
 
         return back()->with('success', 'Thank you for your message! We will get back to you soon.');
     }

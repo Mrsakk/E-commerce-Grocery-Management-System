@@ -72,19 +72,31 @@
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label class="form-label fw-bold text-dark small">{{ __('messages.your_name') }}</label>
-                                <input type="text" name="name" class="form-control" value="{{ old('name', auth()->user()->name ?? '') }}" required style="font-size:0.9rem;">
+                                <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name', auth()->user()->name ?? '') }}" required style="font-size:0.9rem;">
+                                @error('name')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label fw-bold text-dark small">{{ __('messages.your_email') }}</label>
-                                <input type="email" name="email" class="form-control" value="{{ old('email', auth()->user()->email ?? '') }}" required style="font-size:0.9rem;">
+                                <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email', auth()->user()->email ?? '') }}" required style="font-size:0.9rem;">
+                                @error('email')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="col-12">
                                 <label class="form-label fw-bold text-dark small">{{ __('messages.subject_topic') }}</label>
-                                <input type="text" name="subject" class="form-control" value="{{ old('subject') }}" required style="font-size:0.9rem;">
+                                <input type="text" name="subject" class="form-control @error('subject') is-invalid @enderror" value="{{ old('subject') }}" required style="font-size:0.9rem;">
+                                @error('subject')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="col-12">
                                 <label class="form-label fw-bold text-dark small">{{ __('messages.message_description') }}</label>
-                                <textarea name="message" class="form-control" rows="5" placeholder="{{ __('messages.message_placeholder') }}" required style="font-size:0.9rem;"></textarea>
+                                <textarea name="message" class="form-control @error('message') is-invalid @enderror" rows="5" placeholder="{{ __('messages.message_placeholder') }}" required style="font-size:0.9rem;">{{ old('message') }}</textarea>
+                                @error('message')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
                         <button type="submit" class="btn btn-success fw-bold mt-4 px-4"><i class="bi bi-send me-1"></i> {{ __('messages.send_message') }}</button>
