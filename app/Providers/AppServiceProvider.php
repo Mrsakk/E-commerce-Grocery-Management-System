@@ -4,7 +4,28 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Connectors\PostgresConnector;
 use App\Models\Wishlist;
+
+/**
+ * Custom PostgreSQL connector that injects Neon endpoint ID into the DSN
+ * to work around SNI issues on Windows with older libpq versions.
+ */
+class NeonPostgresConnector extends PostgresConnector
+{
+    protected function getDsn(array $config): string
+    {
+        $dsn = parent::getDsn($config);
+
+        // Append Neon endpoint option to fix SNI issue on Windows old libpq
+        if (!empty($config['neon_endpoint'])) {
+            $dsn .= ";options=endpoint={$config['neon_endpoint']}";
+        }
+
+        return $dsn;
+    }
+}
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +40,9 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         \Illuminate\Pagination\Paginator::useBootstrapFive();
+
+        // Register custom Neon PostgreSQL connector to fix SNI issue on Windows
+        $this->app->bind('db.connector.pgsql', NeonPostgresConnector::class);
 
         // View composer to share wishlist product IDs once per request lifecycle
         View::composer(['partials.product-card', 'customer.products.show'], function ($view) {

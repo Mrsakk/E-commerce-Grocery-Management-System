@@ -31,11 +31,12 @@
         "CACHE_STORE": "array",
         "SESSION_DRIVER": "cookie",
         "LOG_CHANNEL": "stderr",
-        "DB_CONNECTION": "@db_connection",
-        "DB_HOST": "@db_host",
-        "DB_PORT": "@db_port",
-        "DB_DATABASE": "@db_database",
-        "DB_USERNAME": "@db_username",
-        "DB_PASSWORD": "@db_password"
+        "DB_CONNECTION": "pgsql",
+        "DB_HOST": "ep-aged-glade-aw7jxgua-pooler.c-12.us-east-1.aws.neon.tech",
+        "DB_PORT": "5432",
+        "DB_DATABASE": "neondb",
+        "DB_USERNAME": "neondb_owner",
+        "DB_PASSWORD": "npg_DykmTz1qoM4Q",
+        "DB_SSLMODE": "require"
     }
 }
