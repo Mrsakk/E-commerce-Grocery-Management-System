@@ -1498,8 +1498,7 @@
                     body: formData,
                     credentials: 'same-origin',
                     headers: {
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'Accept': 'application/json'
+                        'X-Requested-With': 'XMLHttpRequest'
                     }
                 })
                 .then(response => {
