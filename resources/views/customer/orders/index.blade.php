@@ -42,7 +42,7 @@
                                 <div class="d-flex justify-content-between align-items-center py-1">
                                     <div class="d-flex align-items-center gap-2">
                                         <div style="width:6px; height:6px; border-radius:50%; background:var(--primary);"></div>
-                                        <span class="small text-dark fw-medium">{{ $detail->product->product_name }} <span class="text-muted">× {{ $detail->quantity }}</span></span>
+                                        <span class="small text-dark fw-medium">{{ $detail->product?->product_name ?? 'Deleted Product' }} <span class="text-muted">× {{ $detail->quantity }}</span></span>
                                     </div>
                                     <span class="small fw-bold text-muted">${{ number_format($detail->subtotal, 2) }}</span>
                                 </div>

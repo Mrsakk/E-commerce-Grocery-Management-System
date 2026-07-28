@@ -122,7 +122,7 @@
                         <tbody>
                             @forelse($lowStock as $inv)
                                 <tr class="table-warning bg-opacity-10">
-                                    <td class="fw-semibold text-dark">{{ $inv->product->product_name ?? 'N/A' }}</td>
+                                    <td class="fw-semibold text-dark">{{ $inv->product?->product_name ?? 'N/A' }}</td>
                                     <td><span class="badge bg-danger rounded-pill px-2.5 py-1 fw-bold">{{ $inv->qty_in_stock }}</span></td>
                                     <td><span class="text-muted">{{ $inv->reorder_level }}</span></td>
                                 </tr>

@@ -72,7 +72,7 @@ class DeliveryController extends Controller
         }
 
         ActivityLogger::logAction('created', 'Delivery', $delivery->id,
-            "Assigned delivery to order #{$delivery->order_id} for staff: ".$delivery->staff->name);
+            "Assigned delivery to order #{$delivery->order_id} for staff: ".($delivery->staff?->name ?? 'Unknown'));
 
         return redirect()->route('admin.deliveries.index')->with('success', 'Delivery assigned successfully.');
     }

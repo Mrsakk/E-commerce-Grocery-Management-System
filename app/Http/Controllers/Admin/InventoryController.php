@@ -35,11 +35,10 @@ class InventoryController extends Controller
             'reorder_level' => 'required|integer|min:0',
         ]);
 
-        $inventory = Inventory::findOrFail($id);
+        $inventory = Inventory::with('product')->findOrFail($id);
         $oldStock = $inventory->qty_in_stock;
 
         try {
-            $inventory = Inventory::findOrFail($inventory->id);
             $inventory->update([
                 'qty_in_stock' => $request->qty_in_stock,
                 'reorder_level' => $request->reorder_level,
@@ -63,11 +62,13 @@ class InventoryController extends Controller
         }
 
         $inventory->refresh();
+        $inventory->load('product');
 
+        $productName = $inventory->product?->product_name ?? "Product #{$inventory->product_id}";
         ActivityLogger::logAction('updated', 'Inventory', $inventory->id,
-            "Updated stock for {$inventory->product->product_name}: {$oldStock} -> {$request->qty_in_stock}");
+            "Updated stock for {$productName}: {$oldStock} -> {$request->qty_in_stock}");
 
-        if ($request->qty_in_stock <= $request->reorder_level) {
+        if ($request->qty_in_stock <= $request->reorder_level && $inventory->product) {
             NotificationService::lowStockAlert($inventory->product->product_name, $request->qty_in_stock);
         }
 
@@ -91,12 +92,10 @@ class InventoryController extends Controller
             'note' => 'nullable|string',
         ]);
 
-        $inventory = Inventory::findOrFail($id);
+        $inventory = Inventory::with('product')->findOrFail($id);
         $qty = (int) $request->quantity;
 
         try {
-            $inventory = Inventory::findOrFail($id);
-
             if ($inventory->qty_in_stock < $qty) {
                 throw new \Exception('Not enough stock to mark as damaged.');
             }
@@ -111,7 +110,9 @@ class InventoryController extends Controller
         }
 
         $inventory->refresh();
-        ActivityLogger::logAction('updated', 'Inventory', $inventory->id, "Marked {$qty} units as damaged for {$inventory->product->product_name}");
+        $inventory->load('product');
+        $productName = $inventory->product?->product_name ?? "Product #{$inventory->product_id}";
+        ActivityLogger::logAction('updated', 'Inventory', $inventory->id, "Marked {$qty} units as damaged for {$productName}");
 
         return back()->with('success', 'Damaged stock recorded.');
     }
@@ -144,7 +145,8 @@ class InventoryController extends Controller
         }
 
         $inventory = Inventory::with('product')->findOrFail($id);
-        ActivityLogger::logAction('updated', 'Inventory', $id, "Stock in {$qty} units for {$inventory->product->product_name}");
+        $productName = $inventory->product?->product_name ?? "Product #{$inventory->product_id}";
+        ActivityLogger::logAction('updated', 'Inventory', $id, "Stock in {$qty} units for {$productName}");
 
         return redirect()->route('admin.inventory.index')->with('success', "Added {$qty} units to stock.");
     }
@@ -190,9 +192,10 @@ class InventoryController extends Controller
         }
 
         $inventory = Inventory::with('product')->findOrFail($id);
-        ActivityLogger::logAction('updated', 'Inventory', $id, "Stock out {$qty} units for {$inventory->product->product_name}");
+        $productName = $inventory->product?->product_name ?? "Product #{$inventory->product_id}";
+        ActivityLogger::logAction('updated', 'Inventory', $id, "Stock out {$qty} units for {$productName}");
 
-        if ($inventory->qty_in_stock <= $inventory->reorder_level) {
+        if ($inventory->qty_in_stock <= $inventory->reorder_level && $inventory->product) {
             NotificationService::lowStockAlert($inventory->product->product_name, $inventory->qty_in_stock);
         }
 

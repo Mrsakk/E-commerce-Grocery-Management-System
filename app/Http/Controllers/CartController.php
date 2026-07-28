@@ -46,7 +46,7 @@ class CartController extends Controller
 
             if (! $product->inventory || $product->inventory->qty_in_stock < $request->quantity) {
                 if ($request->ajax()) {
-                    return response()->json(['success' => false, 'message' => __('messages.insufficient_stock') ?? 'Insufficient stock available!']);
+                    return response()->json(['success' => false, 'message' => Lang::has('messages.insufficient_stock') ? __('messages.insufficient_stock') : 'Insufficient stock available!']);
                 }
 
                 return back()->with('error', 'Insufficient stock available!');
@@ -62,7 +62,7 @@ class CartController extends Controller
                 $newQty = $existingItem->quantity + $request->quantity;
                 if ($product->inventory->qty_in_stock < $newQty) {
                     if ($request->ajax()) {
-                        return response()->json(['success' => false, 'message' => __('messages.insufficient_stock') ?? 'Insufficient stock available!']);
+                        return response()->json(['success' => false, 'message' => Lang::has('messages.insufficient_stock') ? __('messages.insufficient_stock') : 'Insufficient stock available!']);
                     }
 
                     return back()->with('error', 'Insufficient stock available!');
@@ -97,7 +97,7 @@ class CartController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => __('messages.product_added_to_cart') ?? 'Product added to cart!',
+                'message' => Lang::has('messages.product_added_to_cart') ? __('messages.product_added_to_cart') : 'Product added to cart!',
                 'cart_count' => $cartCount,
             ]);
         }
@@ -111,17 +111,17 @@ class CartController extends Controller
             'quantity' => 'required|integer|min:1',
         ]);
 
-        $item = CartItem::with('product.inventory')->findOrFail($id);
+        $item = CartItem::with('product.inventory', 'cart')->findOrFail($id);
 
         $customer = Auth::user()->customer;
-        if (! $customer || $item->cart->customer_id !== $customer->id) {
+        if (! $customer || ! $item->cart || $item->cart->customer_id !== $customer->id) {
             abort(403);
         }
 
         try {
             $product = Product::with('inventory')->findOrFail($item->product_id);
 
-            if ($product->inventory->qty_in_stock < $request->quantity) {
+            if (! $product->inventory || $product->inventory->qty_in_stock < $request->quantity) {
                 return back()->with('error', 'Insufficient stock!');
             }
 
@@ -139,10 +139,10 @@ class CartController extends Controller
     public function remove($id)
     {
         try {
-            $item = CartItem::findOrFail($id);
+            $item = CartItem::with('cart')->findOrFail($id);
 
             $customer = Auth::user()->customer;
-            if (! $customer || $item->cart->customer_id !== $customer->id) {
+            if (! $customer || ! $item->cart || $item->cart->customer_id !== $customer->id) {
                 abort(403);
             }
 

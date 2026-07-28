@@ -43,9 +43,9 @@
                 <div class="modal-detail-row"><div class="modal-detail-label">Customer</div><div class="modal-detail-value">{{ $order->customer?->user?->name ?? 'N/A' }}</div></div>
                 <div class="modal-detail-row"><div class="modal-detail-label">Email</div><div class="modal-detail-value">{{ $order->customer?->user?->email ?? 'N/A' }}</div></div>
                 <div class="modal-detail-row"><div class="modal-detail-label">Phone</div><div class="modal-detail-value">{{ $order->customer?->user?->phone ?? 'N/A' }}</div></div>
-                <div class="modal-detail-row"><div class="modal-detail-label">Address</div><div class="modal-detail-value">{{ $order->delivery_address }}</div></div>
-                <div class="modal-detail-row"><div class="modal-detail-label">Payment</div><div class="modal-detail-value">{{ strtoupper($order->payment_method) }}</div></div>
-                <div class="modal-detail-row"><div class="modal-detail-label">Pay Status</div><div class="modal-detail-value"><span class="badge-status bg-{{ $order->payment_status == 'paid' ? 'success' : 'warning' }} text-white">{{ ucfirst($order->payment_status) }}</span></div></div>
+                <div class="modal-detail-row"><div class="modal-detail-label">Address</div><div class="modal-detail-value">{{ $order->delivery_address ?? 'N/A' }}</div></div>
+                <div class="modal-detail-row"><div class="modal-detail-label">Payment</div><div class="modal-detail-value">{{ strtoupper($order->payment_method ?? '') }}</div></div>
+                <div class="modal-detail-row"><div class="modal-detail-label">Pay Status</div><div class="modal-detail-value"><span class="badge-status bg-{{ ($order->payment_status ?? 'pending') == 'paid' ? 'success' : 'warning' }} text-white">{{ ucfirst($order->payment_status ?? 'pending') }}</span></div></div>
                 @if($order->note)<div class="modal-detail-row"><div class="modal-detail-label">Note</div><div class="modal-detail-value">{{ $order->note }}</div></div>@endif
             </div>
         </div>

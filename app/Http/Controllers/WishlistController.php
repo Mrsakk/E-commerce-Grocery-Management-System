@@ -46,7 +46,7 @@ class WishlistController extends Controller
                         'success' => true,
                         'in_wishlist' => false,
                         'wishlist_count' => $wishlistCount,
-                        'message' => __('messages.removed_from_wishlist') ?? 'Product removed from wishlist.',
+                        'message' => Lang::has('messages.removed_from_wishlist') ? __('messages.removed_from_wishlist') : 'Product removed from wishlist.',
                     ]);
                 }
 
@@ -62,7 +62,7 @@ class WishlistController extends Controller
                         'success' => true,
                         'in_wishlist' => true,
                         'wishlist_count' => $wishlistCount,
-                        'message' => __('messages.added_to_wishlist') ?? 'Product added to wishlist!',
+                        'message' => Lang::has('messages.added_to_wishlist') ? __('messages.added_to_wishlist') : 'Product added to wishlist!',
                     ]);
                 }
 
@@ -112,7 +112,7 @@ class WishlistController extends Controller
             return response()->json([
                 'success' => true,
                 'wishlist_count' => $wishlistCount,
-                'message' => __('messages.removed_from_wishlist') ?? 'Product removed from wishlist.',
+                'message' => Lang::has('messages.removed_from_wishlist') ? __('messages.removed_from_wishlist') : 'Product removed from wishlist.',
             ]);
         }
 

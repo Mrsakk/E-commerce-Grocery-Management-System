@@ -81,7 +81,7 @@ class OrderController extends Controller
                 'delivery_status' => 'assigned',
             ]);
         } else {
-            Delivery::create([
+            $delivery = Delivery::create([
                 'order_id' => $order->id,
                 'delivery_staff_id' => $request->delivery_staff_id,
                 'delivery_status' => 'assigned',

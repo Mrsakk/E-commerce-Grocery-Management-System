@@ -124,7 +124,7 @@ class SettingsController extends Controller
     public function updatePayment(Request $request)
     {
         $request->validate([
-            'default_payment' => 'required|in:COD,ABA,Wing,Bakong',
+            'default_payment' => 'required|in:COD,ABA Payroll,ABA,Wing,Bakong',
         ]);
 
         session([

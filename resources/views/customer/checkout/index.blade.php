@@ -217,7 +217,7 @@
                     @foreach($cart->items as $item)
                         <div class="d-flex justify-content-between align-items-center mb-2">
                             <div>
-                                <span class="fw-bold text-dark" style="font-size:0.9rem;">{{ $item->product->product_name }}</span>
+                                <span class="fw-bold text-dark" style="font-size:0.9rem;">{{ $item->product?->product_name ?? 'Deleted Product' }}</span>
                                 <div class="text-muted" style="font-size:0.75rem;">{{ $item->quantity }} × ${{ number_format($item->unit_price, 2) }}</div>
                             </div>
                             <span class="fw-bold text-dark" style="font-size:0.9rem;">${{ number_format($item->subtotal, 2) }}</span>

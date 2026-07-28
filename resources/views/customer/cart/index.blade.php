@@ -45,11 +45,11 @@
                                         <td style="padding: 16px;">
                                             <div class="d-flex align-items-center gap-3">
                                                 <div style="width: 50px; height: 50px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; flex-shrink: 0; border: 1px solid var(--gray-200); overflow: hidden; background: var(--gray-50);">
-                                                    <img src="{{ $item->product->image_url }}" alt="{{ $item->product->product_name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                                                    <img src="{{ $item->product?->image_url ?? '' }}" alt="{{ $item->product?->product_name ?? 'Product' }}" style="width: 100%; height: 100%; object-fit: cover;">
                                                 </div>
                                                 <div>
-                                                    <a href="{{ route('products.show', $item->product_id) }}" class="text-decoration-none text-dark fw-bold" style="font-size:0.92rem;">{{ $item->product->product_name }}</a>
-                                                    <div class="text-muted small" style="font-size: 0.78rem;">{{ $item->product->brand ?? 'FreshMart' }} | {{ $item->product->unit }}</div>
+                                                    <a href="{{ route('products.show', $item->product_id) }}" class="text-decoration-none text-dark fw-bold" style="font-size:0.92rem;">{{ $item->product?->product_name ?? 'Deleted Product' }}</a>
+                                                    <div class="text-muted small" style="font-size: 0.78rem;">{{ $item->product?->brand ?? 'FreshMart' }} | {{ $item->product?->unit ?? '' }}</div>
                                                 </div>
                                             </div>
                                         </td>
@@ -66,7 +66,7 @@
                                         <td class="pe-3">
                                             <form action="{{ route('cart.remove', $item->id) }}" method="POST">
                                                 @csrf @method('DELETE')
-                                                <button type="submit" class="btn btn-link text-danger p-0" onclick="return confirm('{{ __('Remove :name from cart?', ['name' => $item->product->product_name]) }}')">
+                                                <button type="submit" class="btn btn-link text-danger p-0" onclick="return confirm('{{ __('Remove :name from cart?', ['name' => $item->product?->product_name ?? 'this item']) }}')">
                                                     <i class="bi bi-trash-fill fs-5"></i>
                                                 </button>
                                             </form>

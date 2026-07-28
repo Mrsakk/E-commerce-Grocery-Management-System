@@ -15,7 +15,7 @@
             <div class="card-header"><i class="bi bi-info-circle me-2"></i> Delivery Details</div>
             <div class="card-body">
                 <div class="modal-detail-row"><div class="modal-detail-label">Customer</div><div class="modal-detail-value">{{ $delivery->order?->customer?->user?->name ?? 'N/A' }}</div></div>
-                <div class="modal-detail-row"><div class="modal-detail-label">Address</div><div class="modal-detail-value">{{ $delivery->order->delivery_address }}</div></div>
+                <div class="modal-detail-row"><div class="modal-detail-label">Address</div><div class="modal-detail-value">{{ $delivery->order?->delivery_address ?? 'N/A' }}</div></div>
                 <div class="modal-detail-row"><div class="modal-detail-label">Staff</div><div class="modal-detail-value">{{ $delivery->staff?->name ?? 'N/A' }} {{ $delivery->staff ? '(' . $delivery->staff->phone . ')' : '' }}</div></div>
                 <div class="modal-detail-row"><div class="modal-detail-label">Tracking No</div><div class="modal-detail-value font-monospace fw-semibold">{{ $delivery->tracking_no ?? 'N/A' }}</div></div>
                 <div class="modal-detail-row"><div class="modal-detail-label">Status</div><div class="modal-detail-value"><span class="badge-status bg-{{ $delivery->delivery_status == 'delivered' ? 'success' : ($delivery->delivery_status == 'failed' ? 'danger' : 'warning') }} text-white">{{ str_replace('_', ' ', ucfirst($delivery->delivery_status)) }}</span></div></div>
@@ -71,7 +71,7 @@
         </div>
     </div>
     <div class="col-md-5">
-        @if($delivery->order->latitude && $delivery->order->longitude)
+        @if($delivery->order && $delivery->order->latitude && $delivery->order->longitude)
         <div class="card card-custom">
             <div class="card-header"><i class="bi bi-geo-alt me-2"></i> Customer Location</div>
             <div class="card-body p-2">
@@ -95,7 +95,7 @@
     </div>
 </div>
 
-@if($delivery->order->latitude && $delivery->order->longitude)
+@if($delivery->order && $delivery->order->latitude && $delivery->order->longitude)
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     var map = L.map('adminDeliveryMap', { zoomControl: true, attributionControl: false }).setView([{{ $delivery->order->latitude }}, {{ $delivery->order->longitude }}], 16);

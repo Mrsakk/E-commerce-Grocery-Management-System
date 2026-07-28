@@ -55,12 +55,12 @@
             <div class="fw-bold">{{ $order->customer?->user?->name ?? 'N/A' }}</div>
             <div style="font-size: 0.85rem;">{{ $order->customer?->user?->email ?? '' }}</div>
             <div style="font-size: 0.85rem;">{{ $order->customer?->user?->phone ?? '' }}</div>
-            <div style="font-size: 0.85rem;">{{ $order->delivery_address }}</div>
+            <div style="font-size: 0.85rem;">{{ $order->delivery_address ?? 'N/A' }}</div>
         </div>
         <div class="col-md-6 text-md-end">
             <div class="info-label mb-1">Payment Info</div>
-            <div class="info-value">Method: {{ strtoupper($order->payment_method) }}</div>
-            <div class="info-value">Status: <span class="badge bg-{{ $order->payment_status === 'paid' ? 'success' : 'warning' }}">{{ ucfirst($order->payment_status) }}</span></div>
+                <div class="info-value">Method: {{ strtoupper($order->payment_method ?? '') }}</div>
+                <div class="info-value">Status: <span class="badge bg-{{ ($order->payment_status ?? 'pending') === 'paid' ? 'success' : 'warning' }}">{{ ucfirst($order->payment_status ?? 'pending') }}</span></div>
             @if($order->payment && $order->payment->transaction_ref)
                 <div class="info-value">Ref: {{ $order->payment->transaction_ref }}</div>
             @endif

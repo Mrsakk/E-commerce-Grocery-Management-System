@@ -136,10 +136,19 @@
                             <div class="text-muted small mb-2" style="font-size: 0.75rem;">{{ $product->brand ?? 'FreshMart' }}</div>
                             
                             <!-- Ratings and score -->
+                            @php
+                                $attributes = $product->getAttributes();
+                                $cardAvg = array_key_exists('reviews_avg_rating', $attributes)
+                                    ? ($product->reviews_avg_rating !== null ? round($product->reviews_avg_rating, 1) : 4.8)
+                                    : $product->averageRating();
+                                $cardCount = array_key_exists('reviews_count', $attributes)
+                                    ? $product->reviews_count
+                                    : $product->reviewsCount();
+                            @endphp
                             <div class="d-flex align-items-center gap-1 mb-3 text-warning" style="font-size: 0.78rem;">
-                                <i class="bi bi-star-fill"></i>
-                                <span class="text-dark fw-bold">4.8</span>
-                                <span class="text-muted">(24)</span>
+                                <i class="bi bi-star{{ $cardCount > 0 ? '-fill' : ' text-muted opacity-50' }}"></i>
+                                <span class="text-dark fw-bold">{{ $cardAvg }}</span>
+                                <span class="text-muted">({{ $cardCount }})</span>
                             </div>
 
                             <!-- Price and action row -->

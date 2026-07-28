@@ -56,6 +56,10 @@ class ProfileController extends Controller
         $user = auth()->user();
         $customer = $user->customer;
 
+        if (! $customer) {
+            return redirect()->route('home')->with('error', 'Please complete your profile first.');
+        }
+
         return view('customer.profile.index', compact('user', 'customer'));
     }
 

@@ -8,7 +8,11 @@ class Delivery extends Model
 {
     protected $fillable = [
         'order_id', 'delivery_staff_id', 'delivery_date',
-        'delivery_status', 'tracking_no', 'received_by', 'failed_delivery_reason'
+        'delivery_status', 'tracking_no', 'received_by', 'failed_delivery_reason',
+    ];
+
+    protected $casts = [
+        'delivery_date' => 'datetime',
     ];
 
     public function order()

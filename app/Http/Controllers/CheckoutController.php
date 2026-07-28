@@ -127,8 +127,9 @@ class CheckoutController extends Controller
                 $inventory = Inventory::where('product_id', $item->product_id)
                     ->first();
 
+                $productName = $item->product?->product_name ?? "Product #{$item->product_id}";
                 if (! $inventory || $inventory->qty_in_stock < $item->quantity) {
-                    throw new \Exception("Insufficient stock for {$item->product->product_name}!");
+                    throw new \Exception("Insufficient stock for {$productName}!");
                 }
             }
 
@@ -244,7 +245,7 @@ class CheckoutController extends Controller
 
             NotificationService::notifyAdmins(
                 'New Order #'.$order->id,
-                "A new order of \${$totalAmount} has been placed by {$customer->user->name}.",
+                "A new order of \${$totalAmount} has been placed by ".($customer->user?->name ?? 'Unknown').'.',
                 'new_order',
                 $order->id
             );
