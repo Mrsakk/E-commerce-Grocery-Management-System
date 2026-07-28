@@ -41,8 +41,13 @@
     @if($payment->slip_image)
     <div class="mt-4">
         <div class="info-label mb-2">Payment Slip</div>
-        <img src="{{ asset('images/slips/' . $payment->slip_image) }}" alt="Payment Slip"
-             class="img-fluid rounded" style="max-height: 300px; border: 1px solid var(--gray-200);">
+        @if(str_starts_with($payment->slip_image, 'data:'))
+            <img src="{{ $payment->slip_image }}" alt="Payment Slip"
+                 class="img-fluid rounded" style="max-height: 300px; border: 1px solid var(--gray-200);">
+        @else
+            <img src="{{ asset('images/slips/' . $payment->slip_image) }}" alt="Payment Slip"
+                 class="img-fluid rounded" style="max-height: 300px; border: 1px solid var(--gray-200);">
+        @endif
     </div>
     @endif
 </div>
@@ -73,6 +78,4 @@
     </div>
 </div>
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 @endsection

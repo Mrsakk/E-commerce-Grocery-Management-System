@@ -4,7 +4,7 @@
 <div class="page-header">
     <div class="page-header-left">
         <h4><i class="bi bi-grid text-success"></i> {{ __('messages.categories') }}</h4>
-        <p>Manage product categories and组织 your catalog</p>
+        <p>Manage product categories and organize your catalog</p>
     </div>
     <a href="{{ route('admin.categories.create') }}" class="btn btn-success btn-sm">
         <i class="bi bi-plus-lg"></i> {{ __('messages.add_category') }}

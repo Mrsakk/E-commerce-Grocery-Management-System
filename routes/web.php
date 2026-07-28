@@ -166,7 +166,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
 
     Route::get('/stock-movements', [StockMovementController::class, 'index'])->name('stock_movements.index');
-    Route::get('/order-status-histories/{orderId}', [OrderStatusHistoryController::class, 'index'])->name('order_status_histories.index');
+    Route::get('/order-status-histories/{order}', [OrderStatusHistoryController::class, 'index'])->name('order_status_histories.index');
     Route::resource('suppliers', SupplierController::class);
     Route::resource('purchase-orders', PurchaseOrderController::class);
     Route::post('/purchase-orders/{id}/receive', [PurchaseOrderController::class, 'receiveStock'])->name('purchase_orders.receive');

@@ -9,7 +9,6 @@ use App\Services\ActivityLogger;
 use App\Services\NotificationService;
 use App\Services\StockMovementService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class InventoryController extends Controller
 {
@@ -39,8 +38,8 @@ class InventoryController extends Controller
         $inventory = Inventory::findOrFail($id);
         $oldStock = $inventory->qty_in_stock;
 
-        DB::transaction(function () use ($request, $inventory, $oldStock) {
-            $inventory = Inventory::lockForUpdate()->findOrFail($inventory->id);
+        try {
+            $inventory = Inventory::findOrFail($inventory->id);
             $inventory->update([
                 'qty_in_stock' => $request->qty_in_stock,
                 'reorder_level' => $request->reorder_level,
@@ -59,7 +58,9 @@ class InventoryController extends Controller
                     "Manual adjustment: {$oldStock} -> {$request->qty_in_stock}"
                 );
             }
-        });
+        } catch (\Exception $e) {
+            return back()->with('error', 'Failed to update inventory.');
+        }
 
         $inventory->refresh();
 
@@ -93,8 +94,8 @@ class InventoryController extends Controller
         $inventory = Inventory::findOrFail($id);
         $qty = (int) $request->quantity;
 
-        DB::transaction(function () use ($request, $id, $qty) {
-            $inventory = Inventory::lockForUpdate()->findOrFail($id);
+        try {
+            $inventory = Inventory::findOrFail($id);
 
             if ($inventory->qty_in_stock < $qty) {
                 throw new \Exception('Not enough stock to mark as damaged.');
@@ -105,7 +106,9 @@ class InventoryController extends Controller
             $inventory->save();
 
             StockMovementService::damaged($inventory->product_id, $qty, $request->note);
-        });
+        } catch (\Exception $e) {
+            return back()->with('error', $e->getMessage() ?: 'Failed to record damaged stock.');
+        }
 
         $inventory->refresh();
         ActivityLogger::logAction('updated', 'Inventory', $inventory->id, "Marked {$qty} units as damaged for {$inventory->product->product_name}");
@@ -129,14 +132,16 @@ class InventoryController extends Controller
 
         $qty = (int) $request->quantity;
 
-        DB::transaction(function () use ($request, $id, $qty) {
-            $inventory = Inventory::lockForUpdate()->findOrFail($id);
+        try {
+            $inventory = Inventory::findOrFail($id);
             $inventory->qty_in_stock += $qty;
             $inventory->last_updated = now();
             $inventory->save();
 
             StockMovementService::stockIn($inventory->product_id, $qty, 'manual', null, $request->note ?: 'Manual stock in');
-        });
+        } catch (\Exception $e) {
+            return back()->with('error', 'Failed to process stock in.');
+        }
 
         $inventory = Inventory::with('product')->findOrFail($id);
         ActivityLogger::logAction('updated', 'Inventory', $id, "Stock in {$qty} units for {$inventory->product->product_name}");
@@ -160,8 +165,8 @@ class InventoryController extends Controller
 
         $qty = (int) $request->quantity;
 
-        DB::transaction(function () use ($request, $id, $qty) {
-            $inventory = Inventory::lockForUpdate()->findOrFail($id);
+        try {
+            $inventory = Inventory::findOrFail($id);
 
             if ($inventory->qty_in_stock < $qty) {
                 throw new \Exception('Not enough stock for stock out.');
@@ -178,7 +183,9 @@ class InventoryController extends Controller
                     ->latest()->first()
                     ->update(['note' => $request->note]);
             }
-        });
+        } catch (\Exception $e) {
+            return back()->with('error', $e->getMessage() ?: 'Failed to process stock out.');
+        }
 
         $inventory = Inventory::with('product')->findOrFail($id);
         ActivityLogger::logAction('updated', 'Inventory', $id, "Stock out {$qty} units for {$inventory->product->product_name}");

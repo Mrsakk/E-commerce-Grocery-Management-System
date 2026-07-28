@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Address;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class AddressController extends Controller
 {
@@ -36,7 +35,6 @@ class AddressController extends Controller
             'is_default' => 'nullable|boolean',
         ]);
 
-        DB::beginTransaction();
         try {
             $isDefault = $request->boolean('is_default', false);
 
@@ -63,11 +61,7 @@ class AddressController extends Controller
             if (Auth::user()->addresses()->count() === 1) {
                 $address->update(['is_default' => true]);
             }
-
-            DB::commit();
         } catch (\Exception $e) {
-            DB::rollBack();
-
             return back()->with('error', 'Failed to add address.');
         }
 
@@ -110,7 +104,6 @@ class AddressController extends Controller
             'is_default' => 'nullable|boolean',
         ]);
 
-        DB::beginTransaction();
         try {
             $isDefault = $request->boolean('is_default', false);
 
@@ -132,11 +125,7 @@ class AddressController extends Controller
                 'delivery_note' => $request->delivery_note,
                 'is_default' => $isDefault,
             ]);
-
-            DB::commit();
         } catch (\Exception $e) {
-            DB::rollBack();
-
             return back()->with('error', 'Failed to update address.');
         }
 
@@ -170,14 +159,10 @@ class AddressController extends Controller
             abort(403);
         }
 
-        DB::beginTransaction();
         try {
             Address::where('user_id', Auth::id())->update(['is_default' => false]);
             $address->update(['is_default' => true]);
-            DB::commit();
         } catch (\Exception $e) {
-            DB::rollBack();
-
             return back()->with('error', 'Failed to set default address.');
         }
 

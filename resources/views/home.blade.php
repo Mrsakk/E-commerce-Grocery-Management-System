@@ -25,8 +25,7 @@
                 <p class="hero-subtitle mb-4">{{ __('messages.hero_subtitle') }}</p>
                 
                 <div class="d-flex gap-2 mt-4 justify-content-center justify-content-lg-start flex-wrap">
-                    @php $heroCategories = \App\Models\Category::where('status','active')->get(); @endphp
-                    @foreach($heroCategories as $cat)
+                    @foreach($categories as $cat)
                         @php $heroIcons = ['Fresh Vegetables'=>'flower1','Fresh Fruits'=>'apple','Meat & Poultry'=>'egg','Seafood'=>'water','Dairy & Eggs'=>'cup-straw','Rice & Noodles'=>'basket','Beverages'=>'cup']; @endphp
                         <a href="{{ route('products.category', $cat->id) }}" class="hero-chip">
                             <i class="bi bi-{{ $heroIcons[$cat->category_name] ?? 'basket' }} text-success"></i> 

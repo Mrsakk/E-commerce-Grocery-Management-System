@@ -16,7 +16,6 @@ use App\Services\NotificationService;
 use App\Services\StockMovementService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class CheckoutController extends Controller
 {
@@ -123,11 +122,9 @@ class CheckoutController extends Controller
             return redirect()->route('cart.index')->with('error', 'Your cart is empty!');
         }
 
-        DB::beginTransaction();
         try {
             foreach ($cart->items as $item) {
                 $inventory = Inventory::where('product_id', $item->product_id)
-                    ->lockForUpdate()
                     ->first();
 
                 if (! $inventory || $inventory->qty_in_stock < $item->quantity) {
@@ -144,7 +141,7 @@ class CheckoutController extends Controller
             $discount = 0;
             $coupon = null;
             if ($couponId) {
-                $coupon = Coupon::lockForUpdate()->find($couponId);
+                $coupon = Coupon::find($couponId);
                 if ($coupon && $coupon->status === 'active' && $subtotal >= $coupon->min_order_amount) {
                     if ($coupon->discount_type === 'percentage') {
                         $discount = ($subtotal * $coupon->discount_value) / 100;
@@ -185,7 +182,6 @@ class CheckoutController extends Controller
 
             foreach ($cart->items as $item) {
                 $inventory = Inventory::where('product_id', $item->product_id)
-                    ->lockForUpdate()
                     ->first();
 
                 OrderDetail::create([
@@ -217,14 +213,17 @@ class CheckoutController extends Controller
             ]);
 
             if ($request->payment_method !== 'COD') {
-                $slipPath = null;
+                $slipData = null;
                 if ($request->hasFile('slip_image')) {
-                    $slipPath = $request->file('slip_image')->store('uploads/slips', 'private');
+                    $file = $request->file('slip_image');
+                    $mimeType = $file->getMimeType();
+                    $base64 = base64_encode(file_get_contents($file->getRealPath()));
+                    $slipData = 'data:'.$mimeType.';base64,'.$base64;
                 }
 
                 PaymentVerification::create([
                     'payment_id' => $payment->id,
-                    'slip_image' => $slipPath,
+                    'slip_image' => $slipData,
                     'transaction_ref' => $request->transaction_ref,
                     'status' => 'pending',
                 ]);
@@ -239,8 +238,6 @@ class CheckoutController extends Controller
             $cart->items()->delete();
             session()->forget(['applied_coupon_id', 'coupon_code', 'coupon_discount']);
 
-            DB::commit();
-
             NotificationService::notifyAdmins(
                 'New Order #'.$order->id,
                 "A new order of \${$totalAmount} has been placed by {$customer->user->name}.",
@@ -251,7 +248,6 @@ class CheckoutController extends Controller
             return redirect()->route('customer.orders.show', $order->id)
                 ->with('success', 'Order placed successfully!');
         } catch (\Exception $e) {
-            DB::rollBack();
             report($e);
 
             return back()->with('error', 'Something went wrong! Please try again.');

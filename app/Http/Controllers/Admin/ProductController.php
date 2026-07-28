@@ -10,6 +10,7 @@ use App\Services\ActivityLogger;
 use App\Services\NotificationService;
 use App\Services\StockMovementService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 
 class ProductController extends Controller
 {
@@ -104,8 +105,10 @@ class ProductController extends Controller
         $data = $request->except(['image', 'qty_in_stock', 'reorder_level']);
 
         if ($request->hasFile('image')) {
-            if ($product->image && File::exists(storage_path('app/public/images/products/'.$product->image))) {
-                \Illuminate\Support\Facades\File::delete(storage_path('app/public/images/products/'.$product->image));
+            if ($product->image && str_starts_with($product->image, 'data:')) {
+                // base64 images don't need file deletion
+            } elseif ($product->image && File::exists(storage_path('app/public/images/products/'.$product->image))) {
+                File::delete(storage_path('app/public/images/products/'.$product->image));
             }
             $data['image'] = $request->file('image')->store('images/products', 'public');
         }
@@ -145,8 +148,8 @@ class ProductController extends Controller
             return back()->with('error', 'Cannot delete product with existing orders. Consider deactivating it instead.');
         }
 
-        if ($product->image && \Illuminate\Support\Facades\File::exists(storage_path('app/public/images/products/'.$product->image))) {
-            \Illuminate\Support\Facades\File::delete(storage_path('app/public/images/products/'.$product->image));
+        if ($product->image && ! str_starts_with($product->image, 'data:') && File::exists(storage_path('app/public/images/products/'.$product->image))) {
+            File::delete(storage_path('app/public/images/products/'.$product->image));
         }
         ActivityLogger::logAction('deleted', 'Product', $product->id, "Deleted product: {$product->product_name}");
         $product->delete();

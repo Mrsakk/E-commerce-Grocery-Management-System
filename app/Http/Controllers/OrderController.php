@@ -6,7 +6,6 @@ use App\Models\Order;
 use App\Services\OrderStatusService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
@@ -48,19 +47,15 @@ class OrderController extends Controller
             return redirect()->route('home')->with('error', 'Only customers can cancel orders.');
         }
 
-        DB::beginTransaction();
         try {
-            $order = Order::lockForUpdate()
-                ->where('customer_id', $customer->id)
+            $order = Order::where('customer_id', $customer->id)
                 ->where('order_status', 'pending')
                 ->findOrFail($id);
 
             OrderStatusService::change($order, 'cancelled', $request->cancel_reason);
-            DB::commit();
 
             return redirect()->route('customer.orders.index')->with('success', 'Order cancelled successfully.');
         } catch (\Exception $e) {
-            DB::rollBack();
             report($e);
 
             return back()->with('error', 'Failed to cancel order. Please try again.');

@@ -9,7 +9,6 @@ use App\Models\Product;
 use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class CartController extends Controller
 {
@@ -42,12 +41,10 @@ class CartController extends Controller
             return redirect()->route('login')->with('error', 'Please register as a customer first.');
         }
 
-        DB::beginTransaction();
         try {
-            $product = Product::with('inventory')->lockForUpdate()->findOrFail($request->product_id);
+            $product = Product::with('inventory')->findOrFail($request->product_id);
 
             if (! $product->inventory || $product->inventory->qty_in_stock < $request->quantity) {
-                DB::rollBack();
                 if ($request->ajax()) {
                     return response()->json(['success' => false, 'message' => __('messages.insufficient_stock') ?? 'Insufficient stock available!']);
                 }
@@ -64,7 +61,6 @@ class CartController extends Controller
             if ($existingItem) {
                 $newQty = $existingItem->quantity + $request->quantity;
                 if ($product->inventory->qty_in_stock < $newQty) {
-                    DB::rollBack();
                     if ($request->ajax()) {
                         return response()->json(['success' => false, 'message' => __('messages.insufficient_stock') ?? 'Insufficient stock available!']);
                     }
@@ -84,10 +80,7 @@ class CartController extends Controller
                     'subtotal' => $request->quantity * $product->price,
                 ]);
             }
-
-            DB::commit();
         } catch (\Exception $e) {
-            DB::rollBack();
             if ($request->ajax()) {
                 return response()->json(['success' => false, 'message' => 'Failed to add item to cart.']);
             }
@@ -125,13 +118,10 @@ class CartController extends Controller
             abort(403);
         }
 
-        DB::beginTransaction();
         try {
-            $product = Product::with('inventory')->lockForUpdate()->findOrFail($item->product_id);
+            $product = Product::with('inventory')->findOrFail($item->product_id);
 
             if ($product->inventory->qty_in_stock < $request->quantity) {
-                DB::rollBack();
-
                 return back()->with('error', 'Insufficient stock!');
             }
 
@@ -139,11 +129,7 @@ class CartController extends Controller
                 'quantity' => $request->quantity,
                 'subtotal' => $request->quantity * $item->unit_price,
             ]);
-
-            DB::commit();
         } catch (\Exception $e) {
-            DB::rollBack();
-
             return back()->with('error', 'Failed to update cart.');
         }
 

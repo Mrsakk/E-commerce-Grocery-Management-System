@@ -12,7 +12,6 @@ use App\Services\ActivityLogger;
 use App\Services\StockMovementService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class PurchaseOrderController extends Controller
 {
@@ -46,7 +45,6 @@ class PurchaseOrderController extends Controller
             'note' => 'nullable|string',
         ]);
 
-        DB::beginTransaction();
         try {
             $total = 0;
             $orderNumber = 'PO-'.date('Ymd').'-'.strtoupper(uniqid());
@@ -74,13 +72,11 @@ class PurchaseOrderController extends Controller
 
             $purchaseOrder->update(['total_amount' => $total]);
 
-            DB::commit();
             ActivityLogger::log('created', $purchaseOrder, "Created purchase order: {$orderNumber}");
 
             return redirect()->route('admin.purchase-orders.show', $purchaseOrder->id)
                 ->with('success', 'Purchase order created successfully.');
         } catch (\Exception $e) {
-            DB::rollBack();
             report($e);
 
             return back()->with('error', 'Failed to create purchase order. Please try again.');
@@ -138,7 +134,6 @@ class PurchaseOrderController extends Controller
             'items.*.received_qty' => 'required|integer|min:0',
         ]);
 
-        DB::beginTransaction();
         try {
             foreach ($request->items as $itemId => $data) {
                 $poItem = PurchaseOrderItem::findOrFail($itemId);
@@ -147,11 +142,10 @@ class PurchaseOrderController extends Controller
                 if ($receivedQty > 0) {
                     $poItem->update(['received_qty' => $receivedQty]);
 
-                    $inventory = Inventory::lockForUpdate()
-                        ->firstOrCreate(
-                            ['product_id' => $poItem->product_id],
-                            ['qty_in_stock' => 0, 'reorder_level' => 10]
-                        );
+                    $inventory = Inventory::firstOrCreate(
+                        ['product_id' => $poItem->product_id],
+                        ['qty_in_stock' => 0, 'reorder_level' => 10]
+                    );
 
                     $inventory->qty_in_stock += $receivedQty;
                     $inventory->last_updated = now();
@@ -179,12 +173,10 @@ class PurchaseOrderController extends Controller
                 'received_at' => now(),
             ]);
 
-            DB::commit();
             ActivityLogger::logAction('received_stock', 'PurchaseOrder', $purchaseOrder->id, "Received stock for PO: {$purchaseOrder->order_number}");
 
             return back()->with('success', 'Stock received successfully.');
         } catch (\Exception $e) {
-            DB::rollBack();
             report($e);
 
             return back()->with('error', 'Failed to receive stock. Please try again.');

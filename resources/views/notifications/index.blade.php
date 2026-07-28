@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.customer')
 @section('title', 'Notifications')
 @section('content')
 <div class="d-flex justify-content-between align-items-center page-header">

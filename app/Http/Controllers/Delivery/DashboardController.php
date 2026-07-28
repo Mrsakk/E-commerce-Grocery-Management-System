@@ -7,7 +7,6 @@ use App\Models\Delivery;
 use App\Services\OrderStatusService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
@@ -80,7 +79,6 @@ class DashboardController extends Controller
             return back()->with('error', 'On The Way delivery can only transition to Delivered or Failed.');
         }
 
-        DB::beginTransaction();
         try {
             $updateData = [
                 'delivery_status' => $newStatus,
@@ -104,10 +102,7 @@ class DashboardController extends Controller
             if ($newStatus === 'failed') {
                 OrderStatusService::change($delivery->order, 'cancelled', $request->failed_delivery_reason ?? 'Delivery failed');
             }
-
-            DB::commit();
         } catch (\Exception $e) {
-            DB::rollBack();
             report($e);
 
             return back()->with('error', 'Failed to update delivery status.');

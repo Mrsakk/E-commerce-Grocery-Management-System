@@ -125,6 +125,7 @@
                                     </a>
                                 </div>
                             </td>
+                        </tr>
                     @empty
                         <tr>
                             <td colspan="7">

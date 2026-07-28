@@ -7,7 +7,6 @@ use App\Models\Product;
 use App\Models\ProductReview;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class ProductReviewController extends Controller
 {
@@ -38,15 +37,12 @@ class ProductReviewController extends Controller
             return back()->with('error', 'You can only review products you have purchased and received.');
         }
 
-        DB::beginTransaction();
         try {
             $alreadyReviewed = ProductReview::where('product_id', $productId)
                 ->where('customer_id', $customer->id)
                 ->exists();
 
             if ($alreadyReviewed) {
-                DB::rollBack();
-
                 return back()->with('error', 'You have already reviewed this product.');
             }
 
@@ -57,11 +53,7 @@ class ProductReviewController extends Controller
                 'review_text' => $request->review_text,
                 'is_approved' => false,
             ]);
-
-            DB::commit();
         } catch (\Exception $e) {
-            DB::rollBack();
-
             return back()->with('error', 'Failed to submit review. Please try again.');
         }
 
