@@ -20,8 +20,7 @@ class Product extends Model
     ];
 
     protected $casts = [
-        'price' => 'decimal:2',
-        'expiry_date' => 'date',
+        'price' => 'float',
     ];
 
     public function category(): BelongsTo
