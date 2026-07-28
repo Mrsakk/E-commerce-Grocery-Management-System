@@ -20,6 +20,9 @@
     <!-- Leaflet.js for Maps -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        (function(){var k='_scrollRestore',v=sessionStorage.getItem(k);if(v){sessionStorage.removeItem(k);window.scrollTo(0,parseInt(v,10));}})();
+    </script>
     
     <style>
         :root {
@@ -1463,21 +1466,6 @@
             }
         }
 
-        // Scroll position preservation: save before navigation, restore on load
-        (function () {
-            var key = '_scrollRestore';
-            var nav = sessionStorage.getItem(key);
-            if (nav) {
-                sessionStorage.removeItem(key);
-                requestAnimationFrame(function () { window.scrollTo(0, parseInt(nav, 10)); });
-            }
-            window.addEventListener('beforeunload', function () {
-                if (window._pendingScrollRestore) {
-                    sessionStorage.setItem(key, String(window.scrollY));
-                }
-            });
-        })();
-
         // Global Form Interceptor for Add to Cart and Wishlist Toggle
         document.addEventListener('submit', function (event) {
             const form = event.target;
@@ -1519,7 +1507,7 @@
                 })
                 .then(response => {
                     if (response.redirected) {
-                        window._pendingScrollRestore = true;
+                        sessionStorage.setItem('_scrollRestore', String(window.scrollY));
                         window.location.href = response.url;
                         return;
                     }
@@ -1528,7 +1516,7 @@
                 .then(data => {
                     if (!data) return;
                     if (data.redirect) {
-                        window._pendingScrollRestore = true;
+                        sessionStorage.setItem('_scrollRestore', String(window.scrollY));
                         window.location.href = data.redirect;
                         return;
                     }
@@ -1585,7 +1573,7 @@
                 })
                 .catch(error => {
                     console.error('AJAX Error:', error);
-                    window._pendingScrollRestore = true;
+                    sessionStorage.setItem('_scrollRestore', String(window.scrollY));
                     form.submit();
                 })
                 .finally(() => {
