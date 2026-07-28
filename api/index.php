@@ -1,18 +1,16 @@
 <?php
 
-$directories = [
-    '/tmp/views',
-    '/tmp/cache',
-    '/tmp/sessions',
-    '/tmp/logs',
+$tmpDirs = [
     '/tmp/storage/framework/views',
     '/tmp/storage/framework/cache',
+    '/tmp/storage/framework/cache/data',
     '/tmp/storage/framework/sessions',
     '/tmp/storage/framework/testing',
     '/tmp/storage/logs',
+    '/tmp/bootstrap/cache',
 ];
 
-foreach ($directories as $dir) {
+foreach ($tmpDirs as $dir) {
     if (! is_dir($dir)) {
         @mkdir($dir, 0755, true);
     }

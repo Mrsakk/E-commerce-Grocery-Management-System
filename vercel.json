@@ -22,18 +22,21 @@
     "env": {
         "APP_ENV": "production",
         "APP_DEBUG": "false",
+        "APP_URL": "https://e-commerce-grocery-management-system-n0s1g2t54.vercel.app",
+        "DB_CONNECTION": "pgsql",
+        "SESSION_DRIVER": "cookie",
+        "SESSION_CONNECTION": "pgsql",
+        "SESSION_SECURE_COOKIE": "true",
+        "SESSION_SAME_SITE": "lax",
+        "CACHE_STORE": "array",
+        "QUEUE_CONNECTION": "sync",
+        "LOG_CHANNEL": "stderr",
+        "APP_MAINTENANCE_DRIVER": "cache",
         "APP_CONFIG_CACHE": "/tmp/config.php",
         "APP_EVENTS_CACHE": "/tmp/events.php",
         "APP_PACKAGES_CACHE": "/tmp/packages.php",
         "APP_ROUTES_CACHE": "/tmp/routes.php",
         "APP_SERVICES_CACHE": "/tmp/services.php",
-        "VIEW_COMPILED_PATH": "/tmp/views",
-        "CACHE_STORE": "array",
-        "SESSION_DRIVER": "cookie",
-        "SESSION_SECURE_COOKIE": "true",
-        "SESSION_SAME_SITE": "lax",
-        "LOG_CHANNEL": "stderr",
-        "QUEUE_CONNECTION": "sync",
-        "APP_MAINTENANCE_DRIVER": "cache"
+        "VIEW_COMPILED_PATH": "/tmp/views"
     }
 }
