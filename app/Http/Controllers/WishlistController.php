@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Wishlist;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Lang;
 
 class WishlistController extends Controller
 {

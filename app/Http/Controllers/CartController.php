@@ -9,6 +9,7 @@ use App\Models\Product;
 use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Lang;
 
 class CartController extends Controller
 {

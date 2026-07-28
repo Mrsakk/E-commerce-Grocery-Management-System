@@ -22,7 +22,7 @@
     "env": {
         "APP_ENV": "production",
         "APP_DEBUG": "false",
-        "APP_URL": "https://e-commerce-grocery-management-system-n0s1g2t54.vercel.app",
+        "APP_URL": "https://grocery-store.vercel.app",
         "DB_CONNECTION": "pgsql",
         "DB_HOST": "ep-aged-glade-aw7jxgua-pooler.c-12.us-east-1.aws.neon.tech",
         "DB_PORT": "5432",
