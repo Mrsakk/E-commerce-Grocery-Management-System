@@ -119,15 +119,15 @@ class ProductController extends Controller
             'reorder_level' => 'required|integer|min:0',
         ]);
 
-        $product = Product::findOrFail($id);
+        $product = Product::with('inventory')->findOrFail($id);
         $data = $request->except(['image', 'qty_in_stock', 'reorder_level']);
 
         if ($request->hasFile('image')) {
             try {
                 if ($product->image && str_starts_with($product->image, 'data:')) {
                     // base64 images don't need file deletion
-                } elseif ($product->image && File::exists(storage_path('app/public/images/products/'.$product->image))) {
-                    File::delete(storage_path('app/public/images/products/'.$product->image));
+                } elseif ($product->image && File::exists(storage_path('app/public/'.$product->image))) {
+                    File::delete(storage_path('app/public/'.$product->image));
                 }
                 $data['image'] = $request->file('image')->store('images/products', 'public');
             } catch (\Exception $e) {
@@ -181,8 +181,8 @@ class ProductController extends Controller
             return back()->with('error', 'Cannot delete product with existing orders. Consider deactivating it instead.');
         }
 
-        if ($product->image && ! str_starts_with($product->image, 'data:') && File::exists(storage_path('app/public/images/products/'.$product->image))) {
-            File::delete(storage_path('app/public/images/products/'.$product->image));
+        if ($product->image && ! str_starts_with($product->image, 'data:') && File::exists(storage_path('app/public/'.$product->image))) {
+            File::delete(storage_path('app/public/'.$product->image));
         }
         ActivityLogger::logAction('deleted', 'Product', $product->id, "Deleted product: {$product->product_name}");
         $product->delete();
