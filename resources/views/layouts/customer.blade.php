@@ -20,9 +20,6 @@
     <!-- Leaflet.js for Maps -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script>
-        (function(){var k='_scrollRestore',v=sessionStorage.getItem(k);if(v){sessionStorage.removeItem(k);window.scrollTo(0,parseInt(v,10));}})();
-    </script>
     
     <style>
         :root {
@@ -1476,7 +1473,6 @@
             const isWishlistAdd = action.includes('/wishlist/add');
 
             if (isCartAdd || isWishlistAdd) {
-                // If it is the "Buy Now" button in cart form, let it submit normally
                 const submitter = event.submitter;
                 if (submitter && submitter.getAttribute('name') === 'buy_now') {
                     return;
@@ -1484,7 +1480,6 @@
 
                 event.preventDefault();
                 
-                // Disable button to prevent double click
                 const submitBtn = submitter || form.querySelector('button[type="submit"]');
                 const originalBtnHtml = submitBtn ? submitBtn.innerHTML : '';
                 if (submitBtn) {
@@ -1501,23 +1496,23 @@
                 fetch(form.action, {
                     method: 'POST',
                     body: formData,
+                    credentials: 'same-origin',
                     headers: {
-                        'X-Requested-With': 'XMLHttpRequest'
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json'
                     }
                 })
                 .then(response => {
-                    if (response.redirected) {
-                        sessionStorage.setItem('_scrollRestore', String(window.scrollY));
-                        window.location.href = response.url;
-                        return;
-                    }
-                    return response.json();
+                    return response.json().catch(() => {
+                        showToast('Something went wrong. Please try again.', 'danger');
+                        return null;
+                    });
                 })
                 .then(data => {
                     if (!data) return;
+
                     if (data.redirect) {
-                        sessionStorage.setItem('_scrollRestore', String(window.scrollY));
-                        window.location.href = data.redirect;
+                        showToast(data.message || 'Redirecting...', 'warning');
                         return;
                     }
 
@@ -1532,7 +1527,6 @@
                             if (typeof data.wishlist_count !== 'undefined') {
                                 updateWishlistBadge(data.wishlist_count);
                             }
-                            // Update heart icons across the page for this product
                             const prodId = formData.get('product_id');
                             const allWishForms = document.querySelectorAll(`form[action*="/wishlist/add"] input[name="product_id"][value="${prodId}"]`);
                             allWishForms.forEach(input => {
@@ -1552,7 +1546,6 @@
                                 }
                             });
                             
-                            // Also update detail page wishlist button if on product detail page
                             const detailBtn = document.querySelector('button[title*="Wishlist"]');
                             if (detailBtn) {
                                 const heartIcon = detailBtn.querySelector('i');
@@ -1573,8 +1566,7 @@
                 })
                 .catch(error => {
                     console.error('AJAX Error:', error);
-                    sessionStorage.setItem('_scrollRestore', String(window.scrollY));
-                    form.submit();
+                    showToast('Network error. Please try again.', 'danger');
                 })
                 .finally(() => {
                     if (submitBtn) {

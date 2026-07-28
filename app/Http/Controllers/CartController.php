@@ -32,9 +32,10 @@ class CartController extends Controller
             'quantity' => 'required|integer|min:1',
         ]);
 
+        $isAjax = $request->ajax() || $request->expectsJson();
         $customer = Auth::user()->customer;
         if (! $customer) {
-            if ($request->ajax()) {
+            if ($isAjax) {
                 return response()->json(['success' => false, 'redirect' => route('login'), 'message' => 'Please register as a customer first.']);
             }
 
@@ -45,7 +46,7 @@ class CartController extends Controller
             $product = Product::with('inventory')->findOrFail($request->product_id);
 
             if (! $product->inventory || $product->inventory->qty_in_stock < $request->quantity) {
-                if ($request->ajax()) {
+                if ($isAjax) {
                     return response()->json(['success' => false, 'message' => Lang::has('messages.insufficient_stock') ? __('messages.insufficient_stock') : 'Insufficient stock available!']);
                 }
 
@@ -61,7 +62,7 @@ class CartController extends Controller
             if ($existingItem) {
                 $newQty = $existingItem->quantity + $request->quantity;
                 if ($product->inventory->qty_in_stock < $newQty) {
-                    if ($request->ajax()) {
+                    if ($isAjax) {
                         return response()->json(['success' => false, 'message' => Lang::has('messages.insufficient_stock') ? __('messages.insufficient_stock') : 'Insufficient stock available!']);
                     }
 
@@ -81,7 +82,7 @@ class CartController extends Controller
                 ]);
             }
         } catch (\Exception $e) {
-            if ($request->ajax()) {
+            if ($isAjax) {
                 return response()->json(['success' => false, 'message' => 'Failed to add item to cart.']);
             }
 
@@ -92,7 +93,7 @@ class CartController extends Controller
             return redirect()->route('checkout.index')->with('success', 'Product added! Complete your order.');
         }
 
-        if ($request->ajax()) {
+        if ($isAjax) {
             $cartCount = $cart ? $cart->items()->count() : 0;
 
             return response()->json([

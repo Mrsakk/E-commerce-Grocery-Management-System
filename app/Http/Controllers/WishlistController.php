@@ -25,8 +25,9 @@ class WishlistController extends Controller
     {
         $request->validate(['product_id' => 'required|exists:products,id']);
         $customer = auth()->user()->customer;
+        $isAjax = $request->ajax() || $request->expectsJson();
         if (! $customer) {
-            if ($request->ajax()) {
+            if ($isAjax) {
                 return response()->json(['success' => false, 'redirect' => route('products.index'), 'message' => 'Please complete your profile first.']);
             }
 
@@ -41,7 +42,7 @@ class WishlistController extends Controller
             if ($wishlist) {
                 $wishlist->delete();
                 $wishlistCount = Wishlist::where('customer_id', $customer->id)->count();
-                if ($request->ajax()) {
+                if ($isAjax) {
                     return response()->json([
                         'success' => true,
                         'in_wishlist' => false,
@@ -57,7 +58,7 @@ class WishlistController extends Controller
                     'product_id' => $request->product_id,
                 ]);
                 $wishlistCount = Wishlist::where('customer_id', $customer->id)->count();
-                if ($request->ajax()) {
+                if ($isAjax) {
                     return response()->json([
                         'success' => true,
                         'in_wishlist' => true,
@@ -69,7 +70,7 @@ class WishlistController extends Controller
                 return back()->with('success', 'Product added to wishlist!');
             }
         } catch (\Exception $e) {
-            if ($request->ajax()) {
+            if ($isAjax) {
                 return response()->json(['success' => false, 'message' => 'Failed to update wishlist.']);
             }
 
@@ -80,8 +81,9 @@ class WishlistController extends Controller
     public function remove(Request $request, $id)
     {
         $customer = auth()->user()->customer;
+        $isAjax = $request->ajax() || $request->expectsJson();
         if (! $customer) {
-            if ($request->ajax()) {
+            if ($isAjax) {
                 return response()->json(['success' => false, 'message' => 'Please log in first.']);
             }
 
@@ -92,21 +94,21 @@ class WishlistController extends Controller
             $deleted = Wishlist::where('customer_id', $customer->id)->where('id', $id)->delete();
 
             if (! $deleted) {
-                if ($request->ajax()) {
+                if ($isAjax) {
                     return response()->json(['success' => false, 'message' => 'Wishlist item not found.']);
                 }
 
                 return back()->with('error', 'Wishlist item not found.');
             }
         } catch (\Exception $e) {
-            if ($request->ajax()) {
+            if ($isAjax) {
                 return response()->json(['success' => false, 'message' => 'Failed to remove from wishlist.']);
             }
 
             return back()->with('error', 'Failed to remove from wishlist.');
         }
 
-        if ($request->ajax()) {
+        if ($isAjax) {
             $wishlistCount = Wishlist::where('customer_id', $customer->id)->count();
 
             return response()->json([
