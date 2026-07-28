@@ -6,7 +6,7 @@
 <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
         <h4 class="fw-bold mb-1">Stock Out</h4>
-        <p class="text-muted mb-0" style="font-size:0.85rem">Remove stock for {{ $inventory->product->product_name }}</p>
+        <p class="text-muted mb-0" style="font-size:0.85rem">Remove stock for {{ $inventory->product?->product_name ?? 'N/A' }}</p>
     </div>
     <a href="{{ route('admin.inventory.index') }}" class="btn btn-outline-secondary btn-sm">
         <i class="bi bi-arrow-left me-1"></i> Back
@@ -19,7 +19,7 @@
             <div class="col-md-6">
                 <div class="p-3 rounded-3" style="background: var(--primary-50);">
                     <div class="fw-bold text-muted" style="font-size:0.75rem; text-transform:uppercase; letter-spacing:0.5px;">Product</div>
-                    <div class="fw-bold">{{ $inventory->product->product_name }}</div>
+                    <div class="fw-bold">{{ $inventory->product?->product_name ?? 'N/A' }}</div>
                 </div>
             </div>
             <div class="col-md-3">

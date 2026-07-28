@@ -104,7 +104,7 @@
                                     {{ str_replace('_', ' ', $notification->type) }}
                                 </span>
                             </td>
-                            <td class="d-none-mobile">{{ $notification->user->name ?? 'N/A' }}</td>
+                            <td class="d-none-mobile">{{ $notification->user?->name ?? 'N/A' }}</td>
                             <td class="d-none-mobile"><span class="text-muted" style="font-size:0.8rem;">{{ $notification->created_at->format('d/m/Y H:i') }}</span></td>
                             <td>
                                 <div class="action-btns">

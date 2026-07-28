@@ -24,7 +24,7 @@
                         <h5 class="fw-bold mb-1">{{ $product->product_name }}</h5>
                         <span class="badge bg-{{ $product->status == 'active' ? 'success' : 'secondary' }} text-white mb-3">{{ ucfirst($product->status) }}</span>
                         <table class="table table-sm table-borderless">
-                            <tr><td class="text-muted" style="width:140px;">Category</td><td class="fw-semibold">{{ $product->category->category_name ?? 'N/A' }}</td></tr>
+                            <tr><td class="text-muted" style="width:140px;">Category</td><td class="fw-semibold">{{ $product->category?->category_name ?? 'N/A' }}</td></tr>
                             <tr><td class="text-muted">Price</td><td class="fw-bold text-success">${{ number_format($product->price, 2) }}</td></tr>
                             <tr><td class="text-muted">Unit</td><td>{{ $product->unit ?? '—' }}</td></tr>
                             <tr><td class="text-muted">Brand</td><td>{{ $product->brand ?? '—' }}</td></tr>
@@ -61,7 +61,7 @@
                 @forelse($product->reviews->take(5) as $review)
                     <div class="mb-3 pb-3 border-bottom">
                         <div class="d-flex justify-content-between mb-1">
-                            <span class="fw-semibold small">{{ $review->user->name ?? 'Guest' }}</span>
+                            <span class="fw-semibold small">{{ $review->user?->name ?? 'Guest' }}</span>
                             <span class="text-warning" style="font-size:0.75rem;">@for($i=1;$i<=5;$i++)<i class="bi bi-star{{ $i <= $review->rating ? '-fill' : '' }}"></i>@endfor</span>
                         </div>
                         <p class="text-muted mb-0 small">{{ Str::limit($review->comment, 100) }}</p>

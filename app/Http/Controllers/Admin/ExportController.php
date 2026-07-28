@@ -46,8 +46,8 @@ class ExportController extends Controller
             foreach ($orders as $order) {
                 fputcsv($handle, [
                     $order->id,
-                    $order->customer->user->name ?? 'N/A',
-                    $order->customer->user->email ?? 'N/A',
+                    $order->customer?->user?->name ?? 'N/A',
+                    $order->customer?->user?->email ?? 'N/A',
                     $order->created_at->format('Y-m-d H:i'),
                     $order->total_amount,
                     strtoupper($order->payment_method),
@@ -70,12 +70,12 @@ class ExportController extends Controller
             foreach ($customers as $customer) {
                 fputcsv($handle, [
                     $customer->id,
-                    $customer->user->name ?? 'N/A',
-                    $customer->user->email ?? 'N/A',
-                    $customer->user->phone ?? 'N/A',
+                    $customer->user?->name ?? 'N/A',
+                    $customer->user?->email ?? 'N/A',
+                    $customer->user?->phone ?? 'N/A',
                     $customer->city ?? 'N/A',
                     $customer->orders()->count(),
-                    $customer->user->status ?? 'active',
+                    $customer->user?->status ?? 'active',
                     $customer->created_at->format('Y-m-d'),
                 ]);
             }
@@ -94,12 +94,12 @@ class ExportController extends Controller
                 fputcsv($handle, [
                     $product->id,
                     $product->product_name,
-                    $product->category->category_name ?? 'N/A',
+                    $product->category?->category_name ?? 'N/A',
                     $product->price,
                     $product->unit,
                     $product->brand,
-                    $product->inventory->qty_in_stock ?? 0,
-                    $product->inventory->reorder_level ?? 0,
+                    $product->inventory?->qty_in_stock ?? 0,
+                    $product->inventory?->reorder_level ?? 0,
                     $product->status ? 'Active' : 'Inactive',
                 ]);
             }
@@ -136,7 +136,7 @@ class ExportController extends Controller
                 fputcsv($handle, [
                     $payment->id,
                     $payment->order_id,
-                    $payment->order->customer->user->name ?? 'N/A',
+                    $payment->order?->customer?->user?->name ?? 'N/A',
                     $payment->amount,
                     strtoupper($payment->payment_method),
                     $payment->payment_status,

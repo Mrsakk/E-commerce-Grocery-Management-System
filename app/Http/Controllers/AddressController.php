@@ -139,14 +139,18 @@ class AddressController extends Controller
             abort(403);
         }
 
-        $wasDefault = $address->is_default;
-        $address->delete();
+        try {
+            $wasDefault = $address->is_default;
+            $address->delete();
 
-        if ($wasDefault) {
-            $latest = Address::where('user_id', Auth::id())->latest()->first();
-            if ($latest) {
-                $latest->update(['is_default' => true]);
+            if ($wasDefault) {
+                $latest = Address::where('user_id', Auth::id())->latest()->first();
+                if ($latest) {
+                    $latest->update(['is_default' => true]);
+                }
             }
+        } catch (\Exception $e) {
+            return back()->with('error', 'Failed to delete address.');
         }
 
         return redirect()->route('addresses.index')

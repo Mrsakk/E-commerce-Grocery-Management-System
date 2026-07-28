@@ -70,7 +70,7 @@
                     @forelse($logs as $log)
                         <tr>
                             <td class="d-none-mobile"><span class="text-muted" style="font-size:0.82rem;">{{ $log->created_at->format('d/m/Y H:i') }}</span></td>
-                            <td><span class="fw-semibold">{{ $log->user->name ?? 'System' }}</span></td>
+                            <td><span class="fw-semibold">{{ $log->user?->name ?? 'System' }}</span></td>
                             <td>
                                 <span class="badge-status bg-{{ $log->action == 'created' ? 'success' : ($log->action == 'updated' ? 'info' : ($log->action == 'deleted' ? 'danger' : 'warning')) }} text-white">
                                     {{ $log->action }}

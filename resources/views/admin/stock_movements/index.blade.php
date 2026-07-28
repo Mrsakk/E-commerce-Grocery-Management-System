@@ -61,7 +61,7 @@
                         <tr>
                             <td class="d-none-mobile"><span class="fw-bold" style="color:var(--gray-500);">#{{ $m->id }}</span></td>
                             <td class="d-none-mobile"><span class="text-muted" style="font-size:0.82rem;">{{ $m->created_at->format('d/m/Y H:i') }}</span></td>
-                            <td><span class="fw-semibold">{{ $m->product->product_name ?? 'N/A' }}</span></td>
+                            <td><span class="fw-semibold">{{ $m->product?->product_name ?? 'N/A' }}</span></td>
                             <td>
                                 <span class="badge-status bg-{{ $m->type == 'stock_in' ? 'success' : ($m->type == 'stock_out' ? 'danger' : ($m->type == 'adjustment' ? 'warning' : ($m->type == 'damaged' ? 'dark' : 'info'))) }} text-white">
                                     {{ str_replace('_', ' ', ucfirst($m->type)) }}
@@ -69,7 +69,7 @@
                             </td>
                             <td class="{{ $m->quantity > 0 ? 'text-success' : 'text-danger' }} fw-bold">{{ $m->quantity > 0 ? '+' : '' }}{{ $m->quantity }}</td>
                             <td class="d-none d-md-table-cell"><small class="text-muted">{{ $m->reference_type ? ucfirst($m->reference_type) . ' #' . $m->reference_id : '-' }}</small></td>
-                            <td class="d-none-mobile"><small>{{ $m->user->name ?? 'N/A' }}</small></td>
+                            <td class="d-none-mobile"><small>{{ $m->user?->name ?? 'N/A' }}</small></td>
                             <td class="d-none d-md-table-cell"><small class="text-muted">{{ Str::limit($m->note, 30) }}</small></td>
                         </tr>
                     @empty

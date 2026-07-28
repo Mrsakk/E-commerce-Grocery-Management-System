@@ -52,9 +52,9 @@
     <div class="row mb-4">
         <div class="col-md-6">
             <div class="info-label mb-1">Bill To</div>
-            <div class="fw-bold">{{ $order->customer->user->name ?? 'N/A' }}</div>
-            <div style="font-size: 0.85rem;">{{ $order->customer->user->email ?? '' }}</div>
-            <div style="font-size: 0.85rem;">{{ $order->customer->user->phone ?? '' }}</div>
+            <div class="fw-bold">{{ $order->customer?->user?->name ?? 'N/A' }}</div>
+            <div style="font-size: 0.85rem;">{{ $order->customer?->user?->email ?? '' }}</div>
+            <div style="font-size: 0.85rem;">{{ $order->customer?->user?->phone ?? '' }}</div>
             <div style="font-size: 0.85rem;">{{ $order->delivery_address }}</div>
         </div>
         <div class="col-md-6 text-md-end">
@@ -81,7 +81,7 @@
             @foreach($order->details as $detail)
             <tr>
                 <td>{{ $loop->iteration }}</td>
-                <td class="fw-semibold">{{ $detail->product->product_name ?? 'Deleted Product' }}</td>
+                <td class="fw-semibold">{{ $detail->product?->product_name ?? 'Deleted Product' }}</td>
                 <td class="text-end">${{ number_format($detail->unit_price, 2) }}</td>
                 <td class="text-center">{{ $detail->quantity }}</td>
                 <td class="text-end">${{ number_format($detail->subtotal, 2) }}</td>
@@ -136,7 +136,7 @@
             </div>
             <div class="col-md-4">
                 <div class="info-label">Delivery Staff</div>
-                <div class="info-value">{{ $order->delivery->staff->name ?? 'Not assigned' }}</div>
+                <div class="info-value">{{ $order->delivery?->staff?->name ?? 'Not assigned' }}</div>
             </div>
         </div>
     </div>

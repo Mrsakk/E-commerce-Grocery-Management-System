@@ -21,7 +21,7 @@
                         <tbody>
                             @foreach($order->details as $detail)
                                 <tr>
-                                    <td class="fw-semibold">{{ $detail->product->product_name }}</td>
+                                    <td class="fw-semibold">{{ $detail->product?->product_name ?? 'Deleted' }}</td>
                                     <td>${{ number_format($detail->unit_price, 2) }}</td>
                                     <td>{{ $detail->quantity }}</td>
                                     <td class="fw-bold">${{ number_format($detail->subtotal, 2) }}</td>
@@ -40,9 +40,9 @@
         <div class="card card-custom mb-3">
             <div class="card-header"><i class="bi bi-info-circle me-2"></i> Order Info</div>
             <div class="card-body">
-                <div class="modal-detail-row"><div class="modal-detail-label">Customer</div><div class="modal-detail-value">{{ $order->customer->user->name ?? 'N/A' }}</div></div>
-                <div class="modal-detail-row"><div class="modal-detail-label">Email</div><div class="modal-detail-value">{{ $order->customer->user->email ?? 'N/A' }}</div></div>
-                <div class="modal-detail-row"><div class="modal-detail-label">Phone</div><div class="modal-detail-value">{{ $order->customer->user->phone ?? 'N/A' }}</div></div>
+                <div class="modal-detail-row"><div class="modal-detail-label">Customer</div><div class="modal-detail-value">{{ $order->customer?->user?->name ?? 'N/A' }}</div></div>
+                <div class="modal-detail-row"><div class="modal-detail-label">Email</div><div class="modal-detail-value">{{ $order->customer?->user?->email ?? 'N/A' }}</div></div>
+                <div class="modal-detail-row"><div class="modal-detail-label">Phone</div><div class="modal-detail-value">{{ $order->customer?->user?->phone ?? 'N/A' }}</div></div>
                 <div class="modal-detail-row"><div class="modal-detail-label">Address</div><div class="modal-detail-value">{{ $order->delivery_address }}</div></div>
                 <div class="modal-detail-row"><div class="modal-detail-label">Payment</div><div class="modal-detail-value">{{ strtoupper($order->payment_method) }}</div></div>
                 <div class="modal-detail-row"><div class="modal-detail-label">Pay Status</div><div class="modal-detail-value"><span class="badge-status bg-{{ $order->payment_status == 'paid' ? 'success' : 'warning' }} text-white">{{ ucfirst($order->payment_status) }}</span></div></div>
@@ -106,7 +106,7 @@
         <div class="card-body">
             <div class="row g-3">
                 <div class="col-md-3"><strong>Tracking:</strong> {{ $order->delivery->tracking_no ?? 'N/A' }}</div>
-                <div class="col-md-3"><strong>Staff:</strong> {{ $order->delivery->staff->name ?? 'Not assigned' }}</div>
+                <div class="col-md-3"><strong>Staff:</strong> {{ $order->delivery?->staff?->name ?? 'Not assigned' }}</div>
                 <div class="col-md-3"><strong>Status:</strong> <span class="badge-status bg-info text-white">{{ str_replace('_', ' ', ucfirst($order->delivery->delivery_status)) }}</span></div>
                 <div class="col-md-3"><strong>Date:</strong> {{ $order->delivery->delivery_date ?? 'N/A' }}</div>
             </div>

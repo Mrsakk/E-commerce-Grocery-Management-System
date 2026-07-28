@@ -41,29 +41,33 @@ class PaymentController extends Controller
             return back()->with('error', 'Payment is already confirmed.');
         }
 
-        $payment->update([
-            'payment_status' => 'paid',
-            'payment_date' => now(),
-        ]);
-        $payment->order->update(['payment_status' => 'paid']);
+        try {
+            $payment->update([
+                'payment_status' => 'paid',
+                'payment_date' => now(),
+            ]);
+            $payment->order->update(['payment_status' => 'paid']);
 
-        PaymentVerification::create([
-            'payment_id' => $payment->id,
-            'verified_by' => Auth::id(),
-            'status' => 'approved',
-            'verified_at' => now(),
-        ]);
+            PaymentVerification::create([
+                'payment_id' => $payment->id,
+                'verified_by' => Auth::id(),
+                'status' => 'approved',
+                'verified_at' => now(),
+            ]);
 
-        ActivityLogger::logAction('confirmed', 'Payment', $payment->id, "Confirmed payment #{$payment->id} for order #{$payment->order_id}");
+            ActivityLogger::logAction('confirmed', 'Payment', $payment->id, "Confirmed payment #{$payment->id} for order #{$payment->order_id}");
 
-        if ($payment->order->customer && $payment->order->customer->user) {
-            NotificationService::notifyCustomer(
-                $payment->order->customer->user_id,
-                'Payment Received',
-                "Your payment of \${$payment->amount} for order #{$payment->order_id} has been confirmed.",
-                'payment_received',
-                $payment->order_id
-            );
+            if ($payment->order->customer && $payment->order->customer->user) {
+                NotificationService::notifyCustomer(
+                    $payment->order->customer->user_id,
+                    'Payment Received',
+                    "Your payment of \${$payment->amount} for order #{$payment->order_id} has been confirmed.",
+                    'payment_received',
+                    $payment->order_id
+                );
+            }
+        } catch (\Exception $e) {
+            return back()->with('error', 'Failed to confirm payment.');
         }
 
         return back()->with('success', 'Payment confirmed successfully.');
@@ -79,26 +83,30 @@ class PaymentController extends Controller
             return back()->with('error', 'Payment is already rejected.');
         }
 
-        $payment->update(['payment_status' => 'failed']);
+        try {
+            $payment->update(['payment_status' => 'failed']);
 
-        PaymentVerification::create([
-            'payment_id' => $payment->id,
-            'verified_by' => Auth::id(),
-            'status' => 'rejected',
-            'rejection_reason' => $request->rejection_reason,
-            'verified_at' => now(),
-        ]);
+            PaymentVerification::create([
+                'payment_id' => $payment->id,
+                'verified_by' => Auth::id(),
+                'status' => 'rejected',
+                'rejection_reason' => $request->rejection_reason,
+                'verified_at' => now(),
+            ]);
 
-        ActivityLogger::logAction('rejected', 'Payment', $payment->id, "Rejected payment #{$payment->id}");
+            ActivityLogger::logAction('rejected', 'Payment', $payment->id, "Rejected payment #{$payment->id}");
 
-        if ($payment->order->customer && $payment->order->customer->user) {
-            NotificationService::notifyCustomer(
-                $payment->order->customer->user_id,
-                'Payment Rejected',
-                "Your payment for order #{$payment->order_id} was rejected. Reason: {$request->rejection_reason}",
-                'payment_rejected',
-                $payment->order_id
-            );
+            if ($payment->order->customer && $payment->order->customer->user) {
+                NotificationService::notifyCustomer(
+                    $payment->order->customer->user_id,
+                    'Payment Rejected',
+                    "Your payment for order #{$payment->order_id} was rejected. Reason: {$request->rejection_reason}",
+                    'payment_rejected',
+                    $payment->order_id
+                );
+            }
+        } catch (\Exception $e) {
+            return back()->with('error', 'Failed to reject payment.');
         }
 
         return back()->with('success', 'Payment rejected.');
@@ -108,7 +116,7 @@ class PaymentController extends Controller
     {
         $payment = Payment::with('order')->findOrFail($id);
 
-        if ($payment->payment_method !== 'cod') {
+        if (strtoupper($payment->payment_method) !== 'COD') {
             return back()->with('error', 'This action is only available for COD payments.');
         }
 

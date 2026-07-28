@@ -64,7 +64,7 @@
                         <tr>
                             <td class="d-none-mobile"><span class="fw-bold" style="color:var(--gray-500);">#{{ $review->id }}</span></td>
                             <td class="fw-semibold">{{ $review->product->product_name ?? 'Deleted' }}</td>
-                            <td class="d-none d-md-table-cell">{{ $review->customer->user->name ?? 'N/A' }}</td>
+                            <td class="d-none d-md-table-cell">{{ $review->customer?->user?->name ?? 'N/A' }}</td>
                             <td>
                                 @for($i = 1; $i <= 5; $i++)
                                     <i class="bi bi-star{{ $i <= $review->rating ? '-fill text-warning' : ' text-muted' }}" style="font-size:0.75rem;"></i>

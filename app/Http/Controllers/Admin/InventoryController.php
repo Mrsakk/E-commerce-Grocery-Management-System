@@ -179,9 +179,11 @@ class InventoryController extends Controller
             StockMovementService::stockOut($inventory->product_id, $qty, 'manual', null);
 
             if ($request->note) {
-                StockMovement::where('product_id', $inventory->product_id)
-                    ->latest()->first()
-                    ->update(['note' => $request->note]);
+                $movement = StockMovement::where('product_id', $inventory->product_id)
+                    ->latest()->first();
+                if ($movement) {
+                    $movement->update(['note' => $request->note]);
+                }
             }
         } catch (\Exception $e) {
             return back()->with('error', $e->getMessage() ?: 'Failed to process stock out.');

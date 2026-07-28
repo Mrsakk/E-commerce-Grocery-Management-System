@@ -18,23 +18,35 @@ class NotificationController extends Controller
 
     public function markAsRead($id)
     {
-        $notification = AppNotification::where('user_id', Auth::id())->findOrFail($id);
-        $notification->update(['is_read' => true]);
+        try {
+            $notification = AppNotification::where('user_id', Auth::id())->findOrFail($id);
+            $notification->update(['is_read' => true]);
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Failed to mark notification as read.');
+        }
 
         return redirect()->back()->with('success', 'Notification marked as read.');
     }
 
     public function markAllRead()
     {
-        AppNotification::where('user_id', Auth::id())->where('is_read', false)
-            ->update(['is_read' => true]);
+        try {
+            AppNotification::where('user_id', Auth::id())->where('is_read', false)
+                ->update(['is_read' => true]);
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Failed to mark notifications as read.');
+        }
 
         return redirect()->back()->with('success', 'All notifications marked as read.');
     }
 
     public function unreadCount()
     {
-        $count = AppNotification::where('user_id', Auth::id())->where('is_read', false)->count();
+        try {
+            $count = AppNotification::where('user_id', Auth::id())->where('is_read', false)->count();
+        } catch (\Exception $e) {
+            $count = 0;
+        }
 
         return response()->json(['count' => $count]);
     }

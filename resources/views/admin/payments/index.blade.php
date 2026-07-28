@@ -88,11 +88,11 @@
                             <td>
                                 <div class="d-flex align-items-center gap-2">
                                     <div class="rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width:30px;height:30px;background:var(--primary-50);color:var(--primary);font-size:0.78rem;">
-                                        {{ substr($payment->order->customer->user->name ?? 'G', 0, 1) }}
+                                        {{ substr($payment->order?->customer?->user?->name ?? 'G', 0, 1) }}
                                     </div>
                                     <div>
-                                        <div class="fw-semibold" style="color:var(--gray-900);">{{ $payment->order->customer->user->name ?? 'Guest' }}</div>
-                                        <small class="text-muted" style="font-size:0.7rem;">{{ $payment->order->customer->phone ?? '' }}</small>
+                                        <div class="fw-semibold" style="color:var(--gray-900);">{{ $payment->order?->customer?->user?->name ?? 'Guest' }}</div>
+                                        <small class="text-muted" style="font-size:0.7rem;">{{ $payment->order?->customer?->phone ?? '' }}</small>
                                     </div>
                                 </div>
                             </td>

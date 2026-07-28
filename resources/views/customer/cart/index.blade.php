@@ -58,8 +58,8 @@
                                             <form action="{{ route('cart.update', $item->id) }}" method="POST" class="input-group input-group-sm border rounded-3 overflow-hidden" style="max-width:120px;">
                                                 @csrf @method('PATCH')
                                                 <button type="button" class="btn btn-light" onclick="var q=this.parentElement.querySelector('input'); if(parseInt(q.value)>1){ q.value=parseInt(q.value)-1; this.form.submit(); }">−</button>
-                                                <input type="number" name="quantity" value="{{ $item->quantity }}" min="1" max="{{ $item->product->inventory->qty_in_stock ?? 99 }}" class="form-control text-center fw-bold border-0 bg-white" readonly>
-                                                <button type="button" class="btn btn-light" onclick="var q=this.parentElement.querySelector('input'); if(parseInt(q.value)<{{ $item->product->inventory->qty_in_stock ?? 99 }}){ q.value=parseInt(q.value)+1; this.form.submit(); }">+</button>
+                                                <input type="number" name="quantity" value="{{ $item->quantity }}" min="1" max="{{ $item->product?->inventory?->qty_in_stock ?? 99 }}" class="form-control text-center fw-bold border-0 bg-white" readonly>
+                                                <button type="button" class="btn btn-light" onclick="var q=this.parentElement.querySelector('input'); if(parseInt(q.value)<{{ $item->product?->inventory?->qty_in_stock ?? 99 }}){ q.value=parseInt(q.value)+1; this.form.submit(); }">+</button>
                                             </form>
                                         </td>
                                         <td class="fw-extrabold text-success">${{ number_format($item->subtotal, 2) }}</td>

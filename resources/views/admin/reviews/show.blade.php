@@ -4,7 +4,7 @@
 <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
         <h4 class="fw-bold mb-1"><i class="bi bi-star text-warning"></i> Review #{{ $review->id }}</h4>
-        <p class="text-muted mb-0" style="font-size:0.85rem">{{ $review->product->product_name }} by {{ $review->customer->user->name ?? 'N/A' }}</p>
+        <p class="text-muted mb-0" style="font-size:0.85rem">{{ $review->product?->product_name ?? 'Deleted' }} by {{ $review->customer?->user?->name ?? 'N/A' }}</p>
     </div>
     <a href="{{ route('admin.reviews.index') }}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left me-1"></i> Back</a>
 </div>
@@ -33,9 +33,9 @@
         <div class="card card-custom mb-3">
             <div class="card-header"><i class="bi bi-info-circle me-2"></i> Info</div>
             <div class="card-body">
-                <div class="modal-detail-row"><div class="modal-detail-label">Product</div><div class="modal-detail-value">{{ $review->product->product_name ?? 'N/A' }}</div></div>
-                <div class="modal-detail-row"><div class="modal-detail-label">Customer</div><div class="modal-detail-value">{{ $review->customer->user->name ?? 'N/A' }}</div></div>
-                <div class="modal-detail-row"><div class="modal-detail-label">Email</div><div class="modal-detail-value">{{ $review->customer->user->email ?? 'N/A' }}</div></div>
+                <div class="modal-detail-row"><div class="modal-detail-label">Product</div><div class="modal-detail-value">{{ $review->product?->product_name ?? 'N/A' }}</div></div>
+                <div class="modal-detail-row"><div class="modal-detail-label">Customer</div><div class="modal-detail-value">{{ $review->customer?->user?->name ?? 'N/A' }}</div></div>
+                <div class="modal-detail-row"><div class="modal-detail-label">Email</div><div class="modal-detail-value">{{ $review->customer?->user?->email ?? 'N/A' }}</div></div>
                 <div class="modal-detail-row"><div class="modal-detail-label">Status</div>
                     <div class="modal-detail-value">
                         <span class="badge rounded-pill px-2 py-1 {{ $review->is_approved ? 'bg-success' : 'bg-secondary' }}">

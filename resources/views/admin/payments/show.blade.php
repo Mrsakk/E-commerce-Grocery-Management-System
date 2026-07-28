@@ -4,12 +4,12 @@
 <div class="page-header">
     <div class="page-header-left">
         <h4><i class="bi bi-credit-card text-primary"></i> Payment TXN-{{ str_pad($payment->id, 6, '0', STR_PAD_LEFT) }}</h4>
-        <p>Order #{{ $payment->order_id }} &mdash; {{ $payment->order->customer->user->name ?? 'Guest' }}</p>
+        <p>Order #{{ $payment->order_id }} &mdash; {{ $payment->order?->customer?->user?->name ?? 'Guest' }}</p>
     </div>
     <a href="{{ route('admin.payments.index') }}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left me-1"></i> Back</a>
 </div>
 <div class="form-card" style="max-width:640px;">
-    <div class="modal-detail-row"><div class="modal-detail-label">Customer</div><div class="modal-detail-value">{{ $payment->order->customer->user->name ?? 'N/A' }}</div></div>
+    <div class="modal-detail-row"><div class="modal-detail-label">Customer</div><div class="modal-detail-value">{{ $payment->order?->customer?->user?->name ?? 'N/A' }}</div></div>
     <div class="modal-detail-row"><div class="modal-detail-label">Amount</div><div class="modal-detail-value fw-bold" style="color:var(--primary);font-size:1.1rem;">${{ number_format($payment->amount, 2) }}</div></div>
     <div class="modal-detail-row"><div class="modal-detail-label">Method</div><div class="modal-detail-value">{{ strtoupper($payment->payment_method) }}</div></div>
     <div class="modal-detail-row"><div class="modal-detail-label">Status</div><div class="modal-detail-value"><span class="badge-status bg-{{ $payment->payment_status == 'paid' ? 'success' : 'warning' }} text-white">{{ ucfirst($payment->payment_status) }}</span></div></div>

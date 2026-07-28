@@ -29,9 +29,9 @@ class ContactController extends Controller
 
         RateLimiter::hit('contact:'.($request->ip()), 300);
 
-        $message = ContactMessage::create($request->only(['name', 'email', 'subject', 'message']));
-
         try {
+            $message = ContactMessage::create($request->only(['name', 'email', 'subject', 'message']));
+
             NotificationService::notifyAdmins(
                 'New Contact Message: '.e($message->subject),
                 e($message->name).' ('.e($message->email).') sent: '.e($message->message),
@@ -39,7 +39,9 @@ class ContactController extends Controller
                 $message->id
             );
         } catch (\Exception $e) {
-            \Log::warning('Failed to notify admins about contact message: '.$e->getMessage());
+            \Log::warning('Failed to save contact message: '.$e->getMessage());
+
+            return back()->with('error', 'Failed to send your message. Please try again later.');
         }
 
         return back()->with('success', 'Thank you for your message! We will get back to you soon.');

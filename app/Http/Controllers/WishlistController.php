@@ -88,14 +88,22 @@ class WishlistController extends Controller
             return back()->with('error', 'Please log in first.');
         }
 
-        $deleted = Wishlist::where('customer_id', $customer->id)->where('id', $id)->delete();
+        try {
+            $deleted = Wishlist::where('customer_id', $customer->id)->where('id', $id)->delete();
 
-        if (! $deleted) {
+            if (! $deleted) {
+                if ($request->ajax()) {
+                    return response()->json(['success' => false, 'message' => 'Wishlist item not found.']);
+                }
+
+                return back()->with('error', 'Wishlist item not found.');
+            }
+        } catch (\Exception $e) {
             if ($request->ajax()) {
-                return response()->json(['success' => false, 'message' => 'Wishlist item not found.']);
+                return response()->json(['success' => false, 'message' => 'Failed to remove from wishlist.']);
             }
 
-            return back()->with('error', 'Wishlist item not found.');
+            return back()->with('error', 'Failed to remove from wishlist.');
         }
 
         if ($request->ajax()) {

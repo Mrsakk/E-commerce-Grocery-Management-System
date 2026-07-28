@@ -1,7 +1,7 @@
 <div class="{{ $gridClass ?? 'col-6 col-md-3 col-lg-2' }} mb-4">
     @php
-        $qtyInStock = $product->inventory->qty_in_stock ?? 0;
-        $reorderLevel = $product->inventory->reorder_level ?? 0;
+        $qtyInStock = $product->inventory?->qty_in_stock ?? 0;
+        $reorderLevel = $product->inventory?->reorder_level ?? 0;
         $isOutOfStock = $qtyInStock <= 0;
         $isLowStock = !$isOutOfStock && $qtyInStock <= $reorderLevel;
         
@@ -54,7 +54,7 @@
         
         <!-- Details Body -->
         <div class="card-body p-3 d-flex flex-column flex-grow-1">
-            <span class="text-uppercase text-success fw-bold" style="font-size: 0.68rem; letter-spacing: 0.5px;">{{ Lang::has('messages.' . $product->category->category_name) ? __('messages.' . $product->category->category_name) : $product->category->category_name }}</span>
+            <span class="text-uppercase text-success fw-bold" style="font-size: 0.68rem; letter-spacing: 0.5px;">{{ Lang::has('messages.' . ($product->category?->category_name ?? '')) ? __('messages.' . ($product->category?->category_name ?? '')) : ($product->category?->category_name ?? '') }}</span>
             <h6 class="card-title fw-bold mt-1 mb-1" style="font-size: 0.92rem; height: 2.6em; line-height: 1.3; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">
                 <a href="{{ route('products.show', $product->id) }}" class="text-decoration-none text-dark">{{ $product->product_name }}</a>
             </h6>

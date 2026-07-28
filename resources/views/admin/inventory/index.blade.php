@@ -85,16 +85,16 @@
                         <tr>
                             <td><span class="fw-bold" style="color:var(--gray-500);">#{{ $inv->id }}</span></td>
                             <td>
-                                <span class="fw-semibold">{{ $inv->product->product_name ?? 'Deleted' }}</span>
-                                @if($inv->product->brand ?? false)
-                                    <small class="text-muted d-block" style="font-size:0.7rem;">{{ $inv->product->brand }}</small>
+                                <span class="fw-semibold">{{ $inv->product?->product_name ?? 'Deleted' }}</span>
+                                @if($inv->product?->brand ?? false)
+                                    <small class="text-muted d-block" style="font-size:0.7rem;">{{ $inv->product?->brand }}</small>
                                 @endif
                             </td>
-                            <td class="d-none d-md-table-cell"><span class="badge bg-secondary bg-opacity-10 text-secondary px-2 py-1 fw-semibold" style="font-size:0.75rem;">{{ $inv->product->category->category_name ?? 'N/A' }}</span></td>
+                            <td class="d-none d-md-table-cell"><span class="badge bg-secondary bg-opacity-10 text-secondary px-2 py-1 fw-semibold" style="font-size:0.75rem;">{{ $inv->product?->category?->category_name ?? 'N/A' }}</span></td>
                             <td>
                                 <div style="max-width:100px;">
                                     <span class="fw-bold" style="color:var(--gray-900);">{{ $qty }}</span>
-                                    @if($inv->product->unit ?? false) <small class="text-muted">{{ $inv->product->unit }}</small> @endif
+                                    @if($inv->product?->unit ?? false) <small class="text-muted">{{ $inv->product?->unit }}</small> @endif
                                     <div class="progress mt-1" style="height:4px;border-radius:10px;">
                                         @php $pct = min(($qty / max($reorder * 2, 10)) * 100, 100); @endphp
                                         <div class="progress-bar {{ $qty == 0 ? 'bg-danger' : ($isLow ? 'bg-warning' : 'bg-success') }}" style="width:{{ $pct }}%;"></div>

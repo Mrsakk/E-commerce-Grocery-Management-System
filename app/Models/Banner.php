@@ -17,11 +17,10 @@ class Banner extends Model
 
     protected $casts = [
         'sort_order' => 'integer',
-        'status' => 'boolean',
     ];
 
     public function scopeActive($query)
     {
-        return $query->where('status', true);
+        return $query->where('status', 'active');
     }
 }

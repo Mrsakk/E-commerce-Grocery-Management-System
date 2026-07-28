@@ -7,7 +7,7 @@
         <ol class="breadcrumb breadcrumb-custom">
             <li class="breadcrumb-item"><a href="{{ route('home') }}">{{ __('messages.home') }}</a></li>
             <li class="breadcrumb-item"><a href="{{ route('products.index') }}">{{ __('messages.products') }}</a></li>
-            <li class="breadcrumb-item"><a href="{{ route('products.category', $product->category_id) }}">{{ Lang::has('messages.' . $product->category->category_name) ? __('messages.' . $product->category->category_name) : $product->category->category_name }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('products.category', $product->category_id) }}">{{ Lang::has('messages.' . ($product->category?->category_name ?? '')) ? __('messages.' . ($product->category?->category_name ?? '')) : ($product->category?->category_name ?? '') }}</a></li>
             <li class="breadcrumb-item active">{{ $product->product_name }}</li>
         </ol>
     </nav>
@@ -36,7 +36,7 @@
                             <i class="bi bi-patch-check-fill me-1"></i>{{ $product->brand ?? 'FreshMart' }}
                         </span>
                         <span class="badge bg-light text-muted fw-bold px-3 py-2 rounded-pill" style="font-size: 0.75rem;">
-                            <i class="bi bi-tag-fill me-1"></i>{{ Lang::has('messages.' . $product->category->category_name) ? __('messages.' . $product->category->category_name) : $product->category->category_name }}
+                            <i class="bi bi-tag-fill me-1"></i>{{ Lang::has('messages.' . ($product->category?->category_name ?? '')) ? __('messages.' . ($product->category?->category_name ?? '')) : ($product->category?->category_name ?? '') }}
                         </span>
                         <span class="badge bg-info bg-opacity-10 text-info fw-bold px-3 py-2 rounded-pill" style="font-size: 0.75rem;">
                             <i class="bi bi-leaf-fill me-1"></i>100% Organic
@@ -117,7 +117,7 @@
                                     </button>
                                     
                                     @php
-                                        $detailInWishlist = \App\Models\Wishlist::where('customer_id', auth()->user()->customer->id ?? 0)
+                                        $detailInWishlist = \App\Models\Wishlist::where('customer_id', auth()->user()->customer?->id ?? 0)
                                             ->where('product_id', $product->id)
                                             ->exists();
                                     @endphp
@@ -235,13 +235,13 @@
                     <div class="col-sm-6">
                         <div class="p-2 border rounded bg-light bg-opacity-25 d-flex justify-content-between">
                             <strong>{{ __('messages.stock_capacity') }}:</strong>
-                            <span>{{ $product->inventory->qty_in_stock ?? 0 }} units</span>
+                            <span>{{ $product->inventory?->qty_in_stock ?? 0 }} units</span>
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <div class="p-2 border rounded bg-light bg-opacity-25 d-flex justify-content-between">
                             <strong>{{ __('messages.reorder_warning') }}:</strong>
-                            <span>{{ $product->inventory->reorder_level ?? 5 }} units</span>
+                            <span>{{ $product->inventory?->reorder_level ?? 5 }} units</span>
                         </div>
                     </div>
                     <div class="col-sm-6">
@@ -289,7 +289,7 @@
                                     <div class="p-3 border rounded-3 bg-light bg-opacity-25">
                                         <div class="d-flex justify-content-between align-items-start mb-2">
                                             <div>
-                                                <span class="fw-bold text-dark d-block" style="font-size:0.9rem;">{{ $rev->customer->user->name }}</span>
+                                                <span class="fw-bold text-dark d-block" style="font-size:0.9rem;">{{ $rev->customer?->user?->name ?? 'Guest' }}</span>
                                                 <div class="text-warning small mt-0.5">
                                                     @for($star = 1; $star <= 5; $star++)
                                                         <i class="bi bi-star{{ $star <= $rev->rating ? '-fill' : '' }}"></i>

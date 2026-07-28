@@ -53,17 +53,17 @@
                             <td>
                                 <div class="d-flex align-items-center gap-2">
                                     <div class="rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width:32px;height:32px;background:var(--primary-50);color:var(--primary);font-size:0.8rem;">
-                                        {{ substr($customer->user->name ?? 'G', 0, 1) }}
+                                        {{ substr($customer->user?->name ?? 'G', 0, 1) }}
                                     </div>
-                                    <span class="fw-semibold">{{ $customer->user->name ?? 'N/A' }}</span>
+                                    <span class="fw-semibold">{{ $customer->user?->name ?? 'N/A' }}</span>
                                 </div>
                             </td>
-                            <td class="d-none d-md-table-cell"><span class="text-muted">{{ $customer->user->email ?? 'N/A' }}</span></td>
-                            <td class="d-none d-sm-table-cell">{{ $customer->user->phone ?? 'N/A' }}</td>
+                            <td class="d-none d-md-table-cell"><span class="text-muted">{{ $customer->user?->email ?? 'N/A' }}</span></td>
+                            <td class="d-none d-sm-table-cell">{{ $customer->user?->phone ?? 'N/A' }}</td>
                             <td class="d-none d-lg-table-cell">{{ $customer->city }}</td>
                             <td><span class="badge-status bg-info text-white">{{ $customer->orders->count() }}</span></td>
                             <td class="d-none d-sm-table-cell">
-                                @php $userStatus = $customer->user->status ?? 'active'; @endphp
+                                @php $userStatus = $customer->user?->status ?? 'active'; @endphp
                                 <span class="badge rounded-pill px-2 py-1 {{ $userStatus === 'active' ? 'bg-success' : 'bg-secondary' }}">
                                     {{ ucfirst($userStatus) }}
                                 </span>

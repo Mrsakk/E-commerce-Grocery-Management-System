@@ -48,9 +48,9 @@
                                         <td style="padding: 16px;">
                                             <div class="d-flex align-items-center gap-3">
                                                 <div style="width:40px; height:40px; border-radius:var(--radius-sm); overflow:hidden; border: 1px solid var(--gray-200); display:flex; align-items:center; justify-content:center; background:#f8fafc;">
-                                                    <img src="{{ $detail->product->image_url }}" alt="{{ $detail->product->product_name }}" class="w-100 h-100 object-fit-cover">
+                                                    <img src="{{ $detail->product?->image_url ?? '' }}" alt="{{ $detail->product?->product_name ?? '' }}" class="w-100 h-100 object-fit-cover">
                                                 </div>
-                                                <span class="fw-bold text-dark" style="font-size:0.9rem;">{{ $detail->product->product_name }}</span>
+                                                <span class="fw-bold text-dark" style="font-size:0.9rem;">{{ $detail->product?->product_name ?? 'Deleted' }}</span>
                                             </div>
                                         </td>
                                         <td class="fw-bold text-dark">${{ number_format($detail->unit_price, 2) }}</td>
@@ -79,8 +79,8 @@
                     <div class="card-body p-4">
                         <div class="row g-3 mb-4 bg-light p-3 rounded-3 text-dark small border">
                             <div class="col-6 col-md-3"><span class="text-muted fw-bold d-block text-uppercase" style="font-size:0.68rem;">{{ __('messages.tracking_number') }}</span> <span class="fw-semibold">{{ $order->delivery->tracking_no ?? 'N/A' }}</span></div>
-                            <div class="col-6 col-md-3"><span class="text-muted fw-bold d-block text-uppercase" style="font-size:0.68rem;">{{ __('messages.delivery_agent') }}</span> <span class="fw-semibold">{{ $order->delivery->staff->name ?? 'N/A' }}</span></div>
-                            <div class="col-6 col-md-3"><span class="text-muted fw-bold d-block text-uppercase" style="font-size:0.68rem;">{{ __('messages.agent_contact') }}</span> <span class="fw-semibold">{{ $order->delivery->staff->phone ?? 'N/A' }}</span></div>
+                                    <div class="col-6 col-md-3"><span class="text-muted fw-bold d-block text-uppercase" style="font-size:0.68rem;">{{ __('messages.delivery_agent') }}</span> <span class="fw-semibold">{{ $order->delivery?->staff?->name ?? 'N/A' }}</span></div>
+                                    <div class="col-6 col-md-3"><span class="text-muted fw-bold d-block text-uppercase" style="font-size:0.68rem;">{{ __('messages.agent_contact') }}</span> <span class="fw-semibold">{{ $order->delivery?->staff?->phone ?? 'N/A' }}</span></div>
                             @if($order->delivery->received_by)
                                 <div class="col-6 col-md-3"><span class="text-muted fw-bold d-block text-uppercase" style="font-size:0.68rem;">{{ __('messages.received_by') }}</span> <span class="fw-semibold text-success">{{ $order->delivery->received_by }}</span></div>
                             @endif

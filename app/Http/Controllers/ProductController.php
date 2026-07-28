@@ -87,19 +87,27 @@ class ProductController extends Controller
         $query = request('q');
         $categories = Category::where('status', 'active')->get();
 
-        $escapedQuery = str_replace(['%', '_'], ['\%', '\_'], $query);
+        $escapedQuery = str_replace(['%', '_'], ['\%', '\_'], $query ?? '');
 
-        $products = Product::where(function ($q) use ($escapedQuery) {
-            $q->where('product_name', 'ilike', "%{$escapedQuery}%")
-                ->orWhere('description', 'ilike', "%{$escapedQuery}%")
-                ->orWhere('brand', 'ilike', "%{$escapedQuery}%");
-        })
-            ->where('status', 'active')
-            ->with('inventory', 'category')
-            ->withAvg('reviews', 'rating')
-            ->withCount('reviews')
-            ->paginate(12);
-        $products->appends(['q' => $query]);
+        try {
+            $products = Product::where(function ($q) use ($escapedQuery) {
+                $q->where('product_name', 'ilike', "%{$escapedQuery}%")
+                    ->orWhere('description', 'ilike', "%{$escapedQuery}%")
+                    ->orWhere('brand', 'ilike', "%{$escapedQuery}%");
+            })
+                ->where('status', 'active')
+                ->with('inventory', 'category')
+                ->withAvg('reviews', 'rating')
+                ->withCount('reviews')
+                ->paginate(12);
+            $products->appends(['q' => $query]);
+        } catch (\Exception $e) {
+            $products = Product::where('status', 'active')
+                ->with('inventory', 'category')
+                ->withAvg('reviews', 'rating')
+                ->withCount('reviews')
+                ->paginate(12);
+        }
 
         return view('customer.products.index', compact('products', 'categories', 'query'));
     }
@@ -130,13 +138,17 @@ class ProductController extends Controller
 
         $escapedQuery = str_replace(['%', '_'], ['\%', '\_'], $query);
 
-        $products = Product::where('status', 'active')
-            ->where(function ($q) use ($escapedQuery) {
-                $q->where('product_name', 'ilike', "%{$escapedQuery}%")
-                    ->orWhere('brand', 'ilike', "%{$escapedQuery}%");
-            })
-            ->take(5)
-            ->get();
+        try {
+            $products = Product::where('status', 'active')
+                ->where(function ($q) use ($escapedQuery) {
+                    $q->where('product_name', 'ilike', "%{$escapedQuery}%")
+                        ->orWhere('brand', 'ilike', "%{$escapedQuery}%");
+                })
+                ->take(5)
+                ->get();
+        } catch (\Exception $e) {
+            $products = collect();
+        }
 
         return response()->json($products->map(function ($product) {
             return [

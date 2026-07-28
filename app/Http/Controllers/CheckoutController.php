@@ -184,6 +184,10 @@ class CheckoutController extends Controller
                 $inventory = Inventory::where('product_id', $item->product_id)
                     ->first();
 
+                if (! $inventory) {
+                    throw new \Exception("Inventory not found for product ID {$item->product_id}.");
+                }
+
                 OrderDetail::create([
                     'order_id' => $order->id,
                     'product_id' => $item->product_id,

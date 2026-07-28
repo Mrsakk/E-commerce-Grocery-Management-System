@@ -69,15 +69,19 @@ class ProfileController extends Controller
             'city' => 'nullable|string|max:100',
         ]);
 
-        $user = auth()->user();
-        $user->fill($request->only(['name', 'email', 'phone']));
-        if ($user->isDirty('email')) {
-            $user->email_verified_at = null;
-        }
-        $user->save();
+        try {
+            $user = auth()->user();
+            $user->fill($request->only(['name', 'email', 'phone']));
+            if ($user->isDirty('email')) {
+                $user->email_verified_at = null;
+            }
+            $user->save();
 
-        if ($customer = $user->customer) {
-            $customer->update($request->only(['address', 'city']));
+            if ($customer = $user->customer) {
+                $customer->update($request->only(['address', 'city']));
+            }
+        } catch (\Exception $e) {
+            return back()->with('error', 'Failed to update profile.');
         }
 
         return redirect()->route('profile.index')->with('success', 'Profile updated successfully!');
@@ -90,12 +94,16 @@ class ProfileController extends Controller
             'password' => 'required|string|min:8|confirmed',
         ]);
 
-        auth()->user()->update([
-            'password' => Hash::make($request->password),
-        ]);
+        try {
+            auth()->user()->update([
+                'password' => Hash::make($request->password),
+            ]);
 
-        Auth::guard('web')->onceUsingId(Auth::id());
-        $request->session()->regenerate();
+            Auth::guard('web')->onceUsingId(Auth::id());
+            $request->session()->regenerate();
+        } catch (\Exception $e) {
+            return back()->with('error', 'Failed to change password.');
+        }
 
         return redirect()->route('profile.index')->with('success', 'Password changed successfully!');
     }
@@ -108,16 +116,24 @@ class ProfileController extends Controller
 
         $user = auth()->user();
 
-        if ($request->hasFile('avatar')) {
-            if ($user->avatar && ! str_starts_with($user->avatar, 'data:')) {
-                Storage::disk('public')->delete($user->avatar);
+        try {
+            if ($request->hasFile('avatar')) {
+                if ($user->avatar && ! str_starts_with($user->avatar, 'data:')) {
+                    try {
+                        Storage::disk('public')->delete($user->avatar);
+                    } catch (\Exception $e) {
+                        \Log::warning('Failed to delete old avatar: '.$e->getMessage());
+                    }
+                }
+
+                $file = $request->file('avatar');
+                $dataUrl = 'data:'.$file->getMimeType().';base64,'.base64_encode($file->get());
+                $user->update(['avatar' => $dataUrl]);
+
+                return redirect()->route('profile.index')->with('success', 'Profile picture updated successfully!');
             }
-
-            $file = $request->file('avatar');
-            $dataUrl = 'data:'.$file->getMimeType().';base64,'.base64_encode($file->get());
-            $user->update(['avatar' => $dataUrl]);
-
-            return redirect()->route('profile.index')->with('success', 'Profile picture updated successfully!');
+        } catch (\Exception $e) {
+            return redirect()->route('profile.index')->with('error', 'Failed to upload profile picture.');
         }
 
         return redirect()->route('profile.index')->with('error', 'Failed to upload profile picture.');
@@ -128,10 +144,18 @@ class ProfileController extends Controller
         $user = auth()->user();
 
         if ($user->avatar) {
-            if (! str_starts_with($user->avatar, 'data:')) {
-                Storage::disk('public')->delete($user->avatar);
+            try {
+                if (! str_starts_with($user->avatar, 'data:')) {
+                    try {
+                        Storage::disk('public')->delete($user->avatar);
+                    } catch (\Exception $e) {
+                        \Log::warning('Failed to delete avatar file: '.$e->getMessage());
+                    }
+                }
+                $user->update(['avatar' => null]);
+            } catch (\Exception $e) {
+                return redirect()->route('profile.index')->with('error', 'Failed to delete profile picture.');
             }
-            $user->update(['avatar' => null]);
 
             return redirect()->route('profile.index')->with('success', 'Profile picture deleted successfully!');
         }

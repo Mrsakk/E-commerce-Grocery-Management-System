@@ -1,9 +1,9 @@
 @extends('layouts.admin')
-@section('title', 'Customer: ' . ($customer->user->name ?? 'N/A'))
+@section('title', 'Customer: ' . ($customer->user?->name ?? 'N/A'))
 @section('content')
 <div class="page-header">
     <div class="page-header-left">
-        <h4><i class="bi bi-person-circle text-primary"></i> Customer: {{ $customer->user->name ?? 'N/A' }}</h4>
+        <h4><i class="bi bi-person-circle text-primary"></i> Customer: {{ $customer->user?->name ?? 'N/A' }}</h4>
         <p>Customer profile and order history</p>
     </div>
     <a href="{{ route('admin.customers.index') }}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left me-1"></i> Back</a>
@@ -13,8 +13,8 @@
         <div class="card card-custom">
             <div class="card-header"><i class="bi bi-person me-2"></i> Profile</div>
             <div class="card-body">
-                <div class="modal-detail-row"><div class="modal-detail-label">Name</div><div class="modal-detail-value">{{ $customer->user->name }}</div></div>
-                <div class="modal-detail-row"><div class="modal-detail-label">Email</div><div class="modal-detail-value">{{ $customer->user->email }}</div></div>
+                <div class="modal-detail-row"><div class="modal-detail-label">Name</div><div class="modal-detail-value">{{ $customer->user?->name ?? 'N/A' }}</div></div>
+                <div class="modal-detail-row"><div class="modal-detail-label">Email</div><div class="modal-detail-value">{{ $customer->user?->email ?? 'N/A' }}</div></div>
                 <div class="modal-detail-row"><div class="modal-detail-label">Phone</div><div class="modal-detail-value">{{ $customer->user->phone ?? 'N/A' }}</div></div>
                 <div class="modal-detail-row"><div class="modal-detail-label">Address</div><div class="modal-detail-value">{{ $customer->address ?? 'N/A' }}</div></div>
                 <div class="modal-detail-row"><div class="modal-detail-label">City</div><div class="modal-detail-value">{{ $customer->city ?? 'N/A' }}</div></div>

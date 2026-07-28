@@ -4,7 +4,7 @@
 <div class="page-header">
     <div class="page-header-left">
         <h4><i class="bi bi-truck text-info"></i> Delivery SHP-{{ str_pad($delivery->id, 6, '0', STR_PAD_LEFT) }}</h4>
-        <p>Order #{{ $delivery->order_id }} &mdash; {{ $delivery->order->customer->user->name ?? 'Guest' }}</p>
+        <p>Order #{{ $delivery->order_id }} &mdash; {{ $delivery->order?->customer?->user?->name ?? 'Guest' }}</p>
     </div>
     <a href="{{ route('admin.deliveries.index') }}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left me-1"></i> Back</a>
 </div>
@@ -14,9 +14,9 @@
         <div class="card card-custom">
             <div class="card-header"><i class="bi bi-info-circle me-2"></i> Delivery Details</div>
             <div class="card-body">
-                <div class="modal-detail-row"><div class="modal-detail-label">Customer</div><div class="modal-detail-value">{{ $delivery->order->customer->user->name ?? 'N/A' }}</div></div>
+                <div class="modal-detail-row"><div class="modal-detail-label">Customer</div><div class="modal-detail-value">{{ $delivery->order?->customer?->user?->name ?? 'N/A' }}</div></div>
                 <div class="modal-detail-row"><div class="modal-detail-label">Address</div><div class="modal-detail-value">{{ $delivery->order->delivery_address }}</div></div>
-                <div class="modal-detail-row"><div class="modal-detail-label">Staff</div><div class="modal-detail-value">{{ $delivery->staff->name ?? 'N/A' }} {{ $delivery->staff ? '(' . $delivery->staff->phone . ')' : '' }}</div></div>
+                <div class="modal-detail-row"><div class="modal-detail-label">Staff</div><div class="modal-detail-value">{{ $delivery->staff?->name ?? 'N/A' }} {{ $delivery->staff ? '(' . $delivery->staff->phone . ')' : '' }}</div></div>
                 <div class="modal-detail-row"><div class="modal-detail-label">Tracking No</div><div class="modal-detail-value font-monospace fw-semibold">{{ $delivery->tracking_no ?? 'N/A' }}</div></div>
                 <div class="modal-detail-row"><div class="modal-detail-label">Status</div><div class="modal-detail-value"><span class="badge-status bg-{{ $delivery->delivery_status == 'delivered' ? 'success' : ($delivery->delivery_status == 'failed' ? 'danger' : 'warning') }} text-white">{{ str_replace('_', ' ', ucfirst($delivery->delivery_status)) }}</span></div></div>
                 <div class="modal-detail-row"><div class="modal-detail-label">Date</div><div class="modal-detail-value">{{ $delivery->delivery_date ?? 'N/A' }}</div></div>

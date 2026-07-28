@@ -138,14 +138,18 @@ class CartController extends Controller
 
     public function remove($id)
     {
-        $item = CartItem::findOrFail($id);
+        try {
+            $item = CartItem::findOrFail($id);
 
-        $customer = Auth::user()->customer;
-        if (! $customer || $item->cart->customer_id !== $customer->id) {
-            abort(403);
+            $customer = Auth::user()->customer;
+            if (! $customer || $item->cart->customer_id !== $customer->id) {
+                abort(403);
+            }
+
+            $item->delete();
+        } catch (\Exception $e) {
+            return back()->with('error', 'Failed to remove item from cart.');
         }
-
-        $item->delete();
 
         return redirect()->route('cart.index')->with('success', 'Item removed from cart!');
     }
@@ -156,10 +160,15 @@ class CartController extends Controller
         if (! $customer) {
             return redirect()->route('home')->with('error', 'Only customers can access cart.');
         }
-        $cart = Cart::where('customer_id', $customer->id)->first();
 
-        if ($cart) {
-            $cart->items()->delete();
+        try {
+            $cart = Cart::where('customer_id', $customer->id)->first();
+
+            if ($cart) {
+                $cart->items()->delete();
+            }
+        } catch (\Exception $e) {
+            return back()->with('error', 'Failed to clear cart.');
         }
 
         return redirect()->route('cart.index')->with('success', 'Cart cleared!');
@@ -176,42 +185,46 @@ class CartController extends Controller
             return back()->with('error', 'Please log in as customer first.');
         }
 
-        $coupon = Coupon::where('code', 'ilike', $request->coupon_code)
-            ->where('status', 'active')
-            ->where('start_date', '<=', now())
-            ->where('end_date', '>=', now())
-            ->first();
+        try {
+            $coupon = Coupon::where('code', $request->coupon_code)
+                ->where('status', 'active')
+                ->where('start_date', '<=', now())
+                ->where('end_date', '>=', now())
+                ->first();
 
-        if (! $coupon) {
-            return back()->with('error', 'Invalid or expired coupon code.');
-        }
-
-        if ($coupon->usage_limit !== null && $coupon->used_count >= $coupon->usage_limit) {
-            return back()->with('error', 'This coupon usage limit has been reached.');
-        }
-
-        $cart = Cart::where('customer_id', $customer->id)->first();
-        $subtotal = $cart ? $cart->items->sum('subtotal') : 0;
-
-        if ($subtotal < $coupon->min_order_amount) {
-            return back()->with('error', 'Minimum order amount of $'.number_format($coupon->min_order_amount, 2).' is required to use this coupon.');
-        }
-
-        $discount = 0;
-        if ($coupon->discount_type === 'percentage') {
-            $discount = ($subtotal * $coupon->discount_value) / 100;
-            if ($coupon->max_discount !== null && $discount > $coupon->max_discount) {
-                $discount = $coupon->max_discount;
+            if (! $coupon) {
+                return back()->with('error', 'Invalid or expired coupon code.');
             }
-        } else {
-            $discount = $coupon->discount_value;
-        }
 
-        session([
-            'applied_coupon_id' => $coupon->id,
-            'coupon_code' => $coupon->code,
-            'coupon_discount' => (float) $discount,
-        ]);
+            if ($coupon->usage_limit !== null && $coupon->used_count >= $coupon->usage_limit) {
+                return back()->with('error', 'This coupon usage limit has been reached.');
+            }
+
+            $cart = Cart::where('customer_id', $customer->id)->first();
+            $subtotal = $cart ? $cart->items->sum('subtotal') : 0;
+
+            if ($subtotal < $coupon->min_order_amount) {
+                return back()->with('error', 'Minimum order amount of $'.number_format($coupon->min_order_amount, 2).' is required to use this coupon.');
+            }
+
+            $discount = 0;
+            if ($coupon->discount_type === 'percentage') {
+                $discount = ($subtotal * $coupon->discount_value) / 100;
+                if ($coupon->max_discount !== null && $discount > $coupon->max_discount) {
+                    $discount = $coupon->max_discount;
+                }
+            } else {
+                $discount = $coupon->discount_value;
+            }
+
+            session([
+                'applied_coupon_id' => $coupon->id,
+                'coupon_code' => $coupon->code,
+                'coupon_discount' => (float) $discount,
+            ]);
+        } catch (\Exception $e) {
+            return back()->with('error', 'Failed to apply coupon.');
+        }
 
         return back()->with('success', 'Coupon applied successfully!');
     }

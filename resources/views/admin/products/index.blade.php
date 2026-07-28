@@ -110,7 +110,7 @@
                             </td>
                             <td class="d-none d-md-table-cell">
                                 <span class="badge bg-secondary bg-opacity-10 text-secondary border px-2 py-1 fw-semibold" style="font-size:0.75rem; border-color:rgba(100,116,139,0.15) !important;">
-                                    {{ $product->category->category_name ?? 'Uncategorized' }}
+                                    {{ $product->category?->category_name ?? 'Uncategorized' }}
                                 </span>
                             </td>
                             <td>
