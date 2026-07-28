@@ -9,6 +9,7 @@ use App\Services\ActivityLogger;
 use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 
 class PaymentController extends Controller
 {
@@ -163,6 +164,9 @@ class PaymentController extends Controller
         $data = [];
 
         if ($request->hasFile('slip_image')) {
+            if ($payment->slip_image && File::exists(storage_path('app/public/'.$payment->slip_image))) {
+                File::delete(storage_path('app/public/'.$payment->slip_image));
+            }
             $data['slip_image'] = $request->file('slip_image')->store('uploads/slips', 'public');
         }
         if ($request->filled('transaction_ref')) {

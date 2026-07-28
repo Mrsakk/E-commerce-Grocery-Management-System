@@ -1544,6 +1544,7 @@
                 </div>
                 <form id="uploadModalForm" method="POST" enctype="multipart/form-data">
                     @csrf
+                    <input type="hidden" name="_method" id="uploadModalMethod" value="POST">
                     <div class="modal-body">
                         <div class="upload-zone" id="uploadDropZone">
                             <i class="bi bi-cloud-arrow-up d-block"></i>
@@ -1693,6 +1694,7 @@
             document.getElementById('uploadModalForm').action = url;
             document.getElementById('uploadableType').value = type || '';
             document.getElementById('uploadableId').value = id || '';
+            document.getElementById('uploadModalMethod').value = (id && id !== '0') ? 'PUT' : 'POST';
             clearUploadPreview();
             
             if (!uploadModalInstance) {
@@ -1742,6 +1744,7 @@
             if (!el.closest('.btn-action')) return;
         });
     </script>
+    @stack('scripts')
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

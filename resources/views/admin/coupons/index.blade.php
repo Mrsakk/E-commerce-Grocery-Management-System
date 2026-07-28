@@ -29,7 +29,7 @@
                         <th class="d-none-mobile">Uses</th>
                         <th class="d-none d-md-table-cell">Period</th>
                         <th class="d-none-mobile">Status</th>
-
+                        <th class="text-end">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -51,11 +51,21 @@
                                     <i class="bi bi-circle-fill" style="font-size:0.35rem;"></i> {{ $expired ? 'Expired' : ucfirst($c->status) }}
                                 </span>
                             </td>
-
+                            <td class="text-end">
+                                <div class="action-btns justify-content-end">
+                                    <a href="{{ route('admin.coupons.edit', $c->id) }}" class="btn-action btn-edit" title="Edit Coupon">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <button class="btn-action btn-delete" title="Delete Coupon"
+                                        onclick="confirmDeleteUrl('{{ route('admin.coupons.destroy', $c->id) }}', 'Delete this coupon?')">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="8">
+                            <td colspan="9">
                                 <div class="empty-state">
                                     <i class="bi bi-tag d-block"></i>
                                     <h5>No Coupons Found</h5>

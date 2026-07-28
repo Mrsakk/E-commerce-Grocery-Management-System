@@ -1,7 +1,7 @@
 {
     "version": 2,
     "framework": null,
-    "buildCommand": "npm run build",
+    "buildCommand": "composer install --no-dev --optimize-autoloader && npm run build",
     "outputDirectory": "public",
     "functions": {
         "api/index.php": {
@@ -10,7 +10,7 @@
     },
     "routes": [
         {
-            "src": "/(css|js|images|storage|build|favicon.ico|robots.txt)(.*)",
+            "src": "/(css|js|images|storage|build|favicon.ico|robots.txt|fonts)(.*)",
             "dest": "/public/$1$2"
         },
         {
@@ -20,9 +20,7 @@
     ],
     "env": {
         "APP_ENV": "production",
-        "APP_KEY": "base64:6VsVtSBXUN9rM0dJp3zELxNy27yUNPuej1FntusqH+s=",
         "APP_DEBUG": "false",
-        "APP_URL": "https://e-commerce-grocery-management-syste.vercel.app",
         "APP_CONFIG_CACHE": "/tmp/config.php",
         "APP_EVENTS_CACHE": "/tmp/events.php",
         "APP_PACKAGES_CACHE": "/tmp/packages.php",
@@ -31,18 +29,10 @@
         "VIEW_COMPILED_PATH": "/tmp/views",
         "CACHE_STORE": "array",
         "SESSION_DRIVER": "cookie",
-        "SESSION_CONNECTION": "pgsql",
         "SESSION_SECURE_COOKIE": "true",
         "SESSION_SAME_SITE": "lax",
         "LOG_CHANNEL": "stderr",
-        "DB_CONNECTION": "pgsql",
-        "DB_URL": "postgresql://neondb_owner:npg_DykmTz1qoM4Q@ep-aged-glade-aw7jxgua-pooler.c-12.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require",
-        "DB_HOST": "ep-aged-glade-aw7jxgua-pooler.c-12.us-east-1.aws.neon.tech",
-        "DB_PORT": "5432",
-        "DB_DATABASE": "neondb",
-        "DB_USERNAME": "neondb_owner",
-        "DB_PASSWORD": "npg_DykmTz1qoM4Q",
-        "DB_SSLMODE": "require",
-        "DB_NEON_ENDPOINT": "ep-aged-glade-aw7jxgua-pooler"
+        "QUEUE_CONNECTION": "sync",
+        "APP_MAINTENANCE_DRIVER": "cache"
     }
 }

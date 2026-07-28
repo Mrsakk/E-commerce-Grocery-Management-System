@@ -1,6 +1,7 @@
 @extends('layouts.admin')
 @section('title', isset($zone) ? 'Edit Delivery Zone' : 'Add Delivery Zone')
 @section('content')
+@php $zone = $zone ?? null; @endphp
 <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
         <h4 class="fw-bold mb-1"><i class="bi bi-geo-alt text-danger"></i> {{ isset($zone) ? 'Edit' : 'Add' }} Delivery Zone</h4>

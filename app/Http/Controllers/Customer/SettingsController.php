@@ -50,8 +50,8 @@ class SettingsController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users,email,'.auth()->id(),
             'phone' => 'nullable|string|max:20',
+            'address' => 'nullable|string|max:500',
             'city' => 'nullable|string|max:100',
-            'bio' => 'nullable|string|max:500',
         ]);
 
         $user = auth()->user();

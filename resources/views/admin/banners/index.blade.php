@@ -7,9 +7,6 @@
         <p>Manage homepage banners and promotional content</p>
     </div>
     <div class="d-flex gap-2">
-        <button class="btn btn-outline-primary btn-sm" onclick="showUploadModal('{{ route('admin.banners.store') }}', 'Upload Banner Image', 'banner', 0)">
-            <i class="bi bi-cloud-upload"></i> Upload
-        </button>
         <a href="{{ route('admin.banners.create') }}" class="btn btn-success btn-sm">
             <i class="bi bi-plus-lg"></i> Add Banner
         </a>
@@ -66,9 +63,12 @@
                             </td>
                             <td class="text-end">
                                 <div class="action-btns justify-content-end">
-                                    <button class="btn-action btn-upload" title="Upload Image"
-                                        onclick="showUploadModal('{{ route('admin.banners.update', $banner->id) }}', 'Upload Banner Image', 'banner', '{{ $banner->id }}')">
-                                        <i class="bi bi-cloud-upload"></i>
+                                    <a href="{{ route('admin.banners.edit', $banner->id) }}" class="btn-action btn-edit" title="Edit Banner">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <button class="btn-action btn-delete" title="Delete Banner"
+                                        onclick="confirmDeleteUrl('{{ route('admin.banners.destroy', $banner->id) }}', 'Delete this banner?')">
+                                        <i class="bi bi-trash"></i>
                                     </button>
                                 </div>
                             </td>

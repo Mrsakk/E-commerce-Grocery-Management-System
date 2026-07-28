@@ -50,7 +50,7 @@
                         <th class="d-none-mobile">Status</th>
                         <th class="d-none d-md-table-cell">Ordered By</th>
                         <th class="d-none-mobile">Date</th>
-
+                        <th class="text-end">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -68,11 +68,24 @@
                             </td>
                             <td class="d-none d-md-table-cell"><span class="text-muted">{{ $po->orderedBy->name ?? 'N/A' }}</span></td>
                             <td class="d-none-mobile"><span class="text-muted" style="font-size:0.82rem;">{{ $po->created_at->format('d/m/Y') }}</span></td>
-
+                            <td class="text-end">
+                                <div class="action-btns justify-content-end">
+                                    <a href="{{ route('admin.purchase-orders.show', $po->id) }}" class="btn-action btn-view" title="View">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a href="{{ route('admin.purchase-orders.edit', $po->id) }}" class="btn-action btn-edit" title="Edit">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <button class="btn-action btn-delete" title="Delete"
+                                        onclick="confirmDeleteUrl('{{ route('admin.purchase-orders.destroy', $po->id) }}', 'Delete this purchase order?')">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="8">
+                            <td colspan="9">
                                 <div class="empty-state">
                                     <i class="bi bi-cart-plus d-block"></i>
                                     <h5>No Purchase Orders</h5>
