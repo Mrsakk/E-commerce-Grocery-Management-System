@@ -190,7 +190,7 @@ class CartController extends Controller
             return back()->with('error', 'Please log in as customer first.');
         }
 
-        $coupon = Coupon::where('code', 'like', $request->coupon_code)
+        $coupon = Coupon::where('code', 'ilike', $request->coupon_code)
             ->where('status', 'active')
             ->where('start_date', '<=', now())
             ->where('end_date', '>=', now())

@@ -89,9 +89,9 @@ class ProductController extends Controller
         $escapedQuery = str_replace(['%', '_'], ['\%', '\_'], $query);
 
         $products = Product::where(function ($q) use ($escapedQuery) {
-            $q->where('product_name', 'like', "%{$escapedQuery}%")
-                ->orWhere('description', 'like', "%{$escapedQuery}%")
-                ->orWhere('brand', 'like', "%{$escapedQuery}%");
+            $q->where('product_name', 'ilike', "%{$escapedQuery}%")
+                ->orWhere('description', 'ilike', "%{$escapedQuery}%")
+                ->orWhere('brand', 'ilike', "%{$escapedQuery}%");
         })
             ->where('status', 'active')
             ->with('inventory', 'category')
@@ -131,8 +131,8 @@ class ProductController extends Controller
 
         $products = Product::where('status', 'active')
             ->where(function ($q) use ($escapedQuery) {
-                $q->where('product_name', 'like', "%{$escapedQuery}%")
-                    ->orWhere('brand', 'like', "%{$escapedQuery}%");
+                $q->where('product_name', 'ilike', "%{$escapedQuery}%")
+                    ->orWhere('brand', 'ilike', "%{$escapedQuery}%");
             })
             ->take(5)
             ->get();

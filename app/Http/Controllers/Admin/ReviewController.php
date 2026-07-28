@@ -28,9 +28,9 @@ class ReviewController extends Controller
         if ($request->filled('search')) {
             $search = str_replace(['%', '_'], ['\%', '\_'], $request->search);
             $query->whereHas('product', function ($q) use ($search) {
-                $q->where('product_name', 'like', "%{$search}%");
+                $q->where('product_name', 'ilike', "%{$search}%");
             })->orWhereHas('customer.user', function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%");
+                $q->where('name', 'ilike', "%{$search}%");
             });
         }
 

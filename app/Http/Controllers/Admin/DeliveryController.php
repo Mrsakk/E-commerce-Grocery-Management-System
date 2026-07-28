@@ -23,8 +23,8 @@ class DeliveryController extends Controller
         if ($request->filled('search')) {
             $search = str_replace(['%', '_'], ['\%', '\_'], $request->search);
             $query->whereHas('order.customer.user', function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                    ->orWhere('email', 'like', "%{$search}%");
+                $q->where('name', 'ilike', "%{$search}%")
+                    ->orWhere('email', 'ilike', "%{$search}%");
             });
         }
 
