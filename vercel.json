@@ -1,7 +1,7 @@
 {
     "version": 2,
     "framework": null,
-    "buildCommand": "npm run build",
+    "buildCommand": "rm -rf bootstrap/cache/*.php && npm run build",
     "outputDirectory": "public",
     "installCommand": "npm install",
     "functions": {
