@@ -1418,7 +1418,7 @@
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('admin.admin_notifications.*') ? 'active' : '' }}" href="{{ route('admin.admin_notifications.index') }}">
                             <i class="bi bi-bell"></i> {{ __('messages.notifications') }}
-                            @php $adminNotifCount = \App\Models\AppNotification::where('is_read', false)->count(); @endphp
+                            @php try { $adminNotifCount = \App\Models\AppNotification::where('is_read', false)->count(); } catch (\Exception $e) { $adminNotifCount = 0; } @endphp
                             @if($adminNotifCount > 0)
                                 <span class="badge bg-danger rounded-pill ms-auto">{{ $adminNotifCount }}</span>
                             @endif
@@ -1474,7 +1474,7 @@
                         </ul>
                     </div>
 
-                    @php $lowStockCount = \App\Models\Inventory::whereColumn('qty_in_stock','<=','reorder_level')->count(); @endphp
+                    @php try { $lowStockCount = \App\Models\Inventory::whereColumn('qty_in_stock','<=','reorder_level')->count(); } catch (\Exception $e) { $lowStockCount = 0; } @endphp
                     @if($lowStockCount > 0)
                         <a href="{{ route('admin.inventory.low_stock') }}" class="btn-icon position-relative" title="Low Stock">
                             <i class="bi bi-exclamation-triangle-fill" style="color: var(--accent);"></i>

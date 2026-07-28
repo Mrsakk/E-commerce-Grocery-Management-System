@@ -51,11 +51,11 @@
             </div>
             <div class="col-md-6">
                 <label class="form-label">Stock Quantity <span class="text-danger">*</span></label>
-                <input type="number" name="qty_in_stock" class="form-control" value="{{ old('qty_in_stock', $product->inventory->qty_in_stock ?? 0) }}" required>
+                <input type="number" name="qty_in_stock" class="form-control" value="{{ old('qty_in_stock', $product->inventory?->qty_in_stock ?? 0) }}" required>
             </div>
             <div class="col-md-6">
                 <label class="form-label">Reorder Level <span class="text-danger">*</span></label>
-                <input type="number" name="reorder_level" class="form-control" value="{{ old('reorder_level', $product->inventory->reorder_level ?? 10) }}" required>
+                <input type="number" name="reorder_level" class="form-control" value="{{ old('reorder_level', $product->inventory?->reorder_level ?? 10) }}" required>
             </div>
             <div class="col-md-6">
                 <label class="form-label">Status</label>
