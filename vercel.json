@@ -20,6 +20,7 @@
     ],
     "env": {
         "APP_ENV": "production",
+        "APP_KEY": "base64:6VsVtSBXUN9rM0dJp3zELxNy27yUNPuej1FntusqH+s=",
         "APP_DEBUG": "false",
         "APP_URL": "https://e-commerce-grocery-management-syste.vercel.app",
         "APP_CONFIG_CACHE": "/tmp/config.php",
