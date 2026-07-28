@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Facades\Storage;
 
 class Product extends Model
 {
@@ -19,7 +20,7 @@ class Product extends Model
     ];
 
     protected $casts = [
-        'price' => 'decimal:2',
+        'price' => 'float',
     ];
 
     public function category(): BelongsTo
@@ -76,8 +77,16 @@ class Product extends Model
 
     public function getImageUrlAttribute(): string
     {
-        if ($this->image && file_exists(public_path('images/products/'.$this->image))) {
-            return asset('images/products/'.$this->image);
+        if ($this->image) {
+            if (str_starts_with($this->image, 'http')) {
+                return $this->image;
+            }
+            if (file_exists(storage_path('app/public/'.$this->image))) {
+                return Storage::disk('public')->url($this->image);
+            }
+            if (file_exists(public_path($this->image))) {
+                return asset($this->image);
+            }
         }
 
         $name = strtolower($this->product_name);
