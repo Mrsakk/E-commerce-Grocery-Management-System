@@ -1197,59 +1197,10 @@
         .swal2-title { font-weight: 700 !important; font-size: 1.1rem !important; }
         .swal2-html-container { font-size: 0.88rem !important; }
 
-        /* ===== MOBILE BOTTOM NAVIGATION ===== */
-        .bottom-nav {
-            display: none;
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(255,255,255,0.96);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border-top: 1px solid var(--gray-200);
-            z-index: 1050;
-            padding: 6px 0;
-            box-shadow: 0 -4px 20px rgba(0,0,0,0.06);
-        }
-        .bottom-nav .nav-item { flex: 1; }
-        .bottom-nav .nav-link {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 2px;
-            padding: 6px 0;
-            color: var(--gray-500) !important;
-            text-decoration: none;
-            font-size: 0.62rem;
-            font-weight: 600;
-            transition: all 0.2s ease;
-            border-radius: 8px;
-            min-height: 48px;
-        }
-        .bottom-nav .nav-link i {
-            font-size: 1.15rem;
-            transition: all 0.2s ease;
-        }
-        .bottom-nav .nav-link.active,
-        .bottom-nav .nav-link:hover {
-            color: var(--primary) !important;
-            background: var(--primary-50);
-        }
-        .bottom-nav .nav-link.active i {
-            transform: scale(1.1);
-        }
-
-        @media (max-width: 992px) {
-            .bottom-nav { display: flex; }
-            body { padding-bottom: 68px; }
-        }
-
         /* ===== BACK TO TOP BUTTON ===== */
         .back-to-top {
             position: fixed;
-            bottom: 84px;
+            bottom: 24px;
             right: 20px;
             width: 40px;
             height: 40px;
@@ -1623,41 +1574,7 @@
 
     @yield('modals')
 
-    <!-- Mobile Bottom Navigation Bar -->
-    <nav class="bottom-nav d-lg-none">
-        <ul class="nav justify-content-around mb-0">
-            <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}" href="{{ route('admin.dashboard') }}">
-                    <i class="bi bi-speedometer2"></i>
-                    <span>{{ __('messages.dashboard') ?? 'Dashboard' }}</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('admin.orders.*') ? 'active' : '' }}" href="{{ route('admin.orders.index') }}">
-                    <i class="bi bi-cart-check"></i>
-                    <span>{{ __('messages.orders') ?? 'Orders' }}</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('admin.products.*') ? 'active' : '' }}" href="{{ route('admin.products.index') }}">
-                    <i class="bi bi-box"></i>
-                    <span>{{ __('messages.products') ?? 'Products' }}</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('admin.inventory.*') ? 'active' : '' }}" href="{{ route('admin.inventory.index') }}">
-                    <i class="bi bi-boxes"></i>
-                    <span>{{ __('messages.stock') ?? 'Stock' }}</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('admin.settings.*') ? 'active' : '' }}" href="{{ route('admin.settings.index') }}">
-                    <i class="bi bi-gear"></i>
-                    <span>{{ __('messages.settings') ?? 'Settings' }}</span>
-                </a>
-            </li>
-        </ul>
-    </nav>
+
 
     <!-- Back to Top Button -->
     <button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">
