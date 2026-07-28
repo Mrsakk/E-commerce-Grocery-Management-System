@@ -2,11 +2,11 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\View;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Database\Connectors\PostgresConnector;
 use App\Models\Wishlist;
+use Illuminate\Database\Connectors\PostgresConnector;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\ServiceProvider;
 
 /**
  * Custom PostgreSQL connector that injects Neon endpoint ID into the DSN
@@ -19,7 +19,7 @@ class NeonPostgresConnector extends PostgresConnector
         $dsn = parent::getDsn($config);
 
         // Append Neon endpoint option to fix SNI issue on Windows old libpq
-        if (!empty($config['neon_endpoint'])) {
+        if (! empty($config['neon_endpoint'])) {
             $dsn .= ";options=endpoint={$config['neon_endpoint']}";
         }
 
@@ -39,7 +39,11 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        \Illuminate\Pagination\Paginator::useBootstrapFive();
+        if (config('app.env') === 'production' || request()->header('x-forwarded-proto') === 'https') {
+            URL::forceScheme('https');
+        }
+
+        Paginator::useBootstrapFive();
 
         // Register custom Neon PostgreSQL connector to fix SNI issue on Windows
         $this->app->bind('db.connector.pgsql', NeonPostgresConnector::class);
@@ -60,4 +64,3 @@ class AppServiceProvider extends ServiceProvider
         });
     }
 }
-
