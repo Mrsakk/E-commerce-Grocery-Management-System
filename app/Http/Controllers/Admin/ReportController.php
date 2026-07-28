@@ -3,11 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Order;
-use App\Models\Product;
 use App\Models\Inventory;
+use App\Models\Order;
 use App\Models\Payment;
-use Illuminate\Http\Request;
+use App\Models\Product;
 use Illuminate\Support\Facades\DB;
 
 class ReportController extends Controller
@@ -55,9 +54,17 @@ class ReportController extends Controller
             ->get();
 
         // Monthly sales chart data
-        $isSqlite = DB::connection()->getDriverName() === 'sqlite';
-        $monthRaw = $isSqlite ? "strftime('%m', order_date) + 0" : "MONTH(order_date)";
-        $yearRaw = $isSqlite ? "strftime('%Y', order_date) + 0" : "YEAR(order_date)";
+        $driver = DB::connection()->getDriverName();
+        if ($driver === 'sqlite') {
+            $monthRaw = "strftime('%m', order_date) + 0";
+            $yearRaw = "strftime('%Y', order_date) + 0";
+        } elseif ($driver === 'pgsql') {
+            $monthRaw = 'EXTRACT(MONTH FROM order_date)';
+            $yearRaw = 'EXTRACT(YEAR FROM order_date)';
+        } else {
+            $monthRaw = 'MONTH(order_date)';
+            $yearRaw = 'YEAR(order_date)';
+        }
 
         $monthlyData = Order::select(
             DB::raw("$monthRaw as month"),
