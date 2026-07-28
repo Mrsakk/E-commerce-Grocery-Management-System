@@ -4,20 +4,27 @@ namespace App\Services;
 
 use App\Models\StockMovement;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class StockMovementService
 {
     public static function record($productId, $type, $quantity, $referenceType = null, $referenceId = null, $note = null)
     {
-        return StockMovement::create([
-            'product_id' => $productId,
-            'user_id' => Auth::id(),
-            'type' => $type,
-            'quantity' => $quantity,
-            'reference_type' => $referenceType,
-            'reference_id' => $referenceId,
-            'note' => $note,
-        ]);
+        try {
+            return StockMovement::create([
+                'product_id' => $productId,
+                'user_id' => Auth::id(),
+                'type' => $type,
+                'quantity' => $quantity,
+                'reference_type' => $referenceType,
+                'reference_id' => $referenceId,
+                'note' => $note,
+            ]);
+        } catch (\Exception $e) {
+            Log::warning('StockMovement record failed: '.$e->getMessage());
+
+            return null;
+        }
     }
 
     public static function stockOut($productId, $quantity, $referenceType = null, $referenceId = null)

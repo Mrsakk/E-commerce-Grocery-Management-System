@@ -78,7 +78,11 @@ class ProductController extends Controller
             'last_updated' => now(),
         ]);
 
-        StockMovementService::stockIn($product->id, $request->qty_in_stock, null, null, 'Initial stock');
+        try {
+            StockMovementService::stockIn($product->id, $request->qty_in_stock, null, null, 'Initial stock');
+        } catch (\Exception $e) {
+            // Stock movement should not block the create
+        }
 
         try {
             ActivityLogger::log('created', $product, "Created product: {$product->product_name}");
@@ -165,7 +169,11 @@ class ProductController extends Controller
 
             if ($request->qty_in_stock != $oldStock) {
                 $diff = $request->qty_in_stock - $oldStock;
-                StockMovementService::adjustment($product->id, $diff, "Stock adjusted from {$oldStock} to {$request->qty_in_stock}");
+                try {
+                    StockMovementService::adjustment($product->id, $diff, "Stock adjusted from {$oldStock} to {$request->qty_in_stock}");
+                } catch (\Exception $e) {
+                    // Stock movement should not block the update
+                }
             }
         }
 
@@ -198,7 +206,11 @@ class ProductController extends Controller
         if ($product->image && ! str_starts_with($product->image, 'data:') && File::exists(storage_path('app/public/'.$product->image))) {
             File::delete(storage_path('app/public/'.$product->image));
         }
-        ActivityLogger::logAction('deleted', 'Product', $product->id, "Deleted product: {$product->product_name}");
+        try {
+            ActivityLogger::logAction('deleted', 'Product', $product->id, "Deleted product: {$product->product_name}");
+        } catch (\Exception $e) {
+            // Activity logging should not block the delete
+        }
         $product->delete();
 
         return redirect()->route('admin.products.index')
