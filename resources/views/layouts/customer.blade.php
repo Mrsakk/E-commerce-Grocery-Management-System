@@ -1514,18 +1514,14 @@
                     method: 'POST',
                     body: formData,
                     headers: {
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'Accept': 'application/json'
+                        'X-Requested-With': 'XMLHttpRequest'
                     }
                 })
-                .then(function (response) {
+                .then(response => {
                     if (response.redirected) {
                         window._pendingScrollRestore = true;
                         window.location.href = response.url;
                         return;
-                    }
-                    if (!response.ok) {
-                        throw new Error('Server returned ' + response.status);
                     }
                     return response.json();
                 })
@@ -1589,7 +1585,8 @@
                 })
                 .catch(error => {
                     console.error('AJAX Error:', error);
-                    showToast('Something went wrong. Please try again.', 'danger');
+                    window._pendingScrollRestore = true;
+                    form.submit();
                 })
                 .finally(() => {
                     if (submitBtn) {
