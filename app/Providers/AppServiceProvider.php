@@ -46,8 +46,10 @@ class AppServiceProvider extends ServiceProvider
 
         Paginator::useBootstrapFive();
 
-        // Register custom Neon PostgreSQL connector to fix SNI issue on Windows
-        $this->app->bind('db.connector.pgsql', NeonPostgresConnector::class);
+        // Register custom Neon PostgreSQL connector to fix SNI issue on Windows only
+        if (PHP_OS_FAMILY === 'Windows') {
+            $this->app->bind('db.connector.pgsql', NeonPostgresConnector::class);
+        }
 
         // View composer to share wishlist product IDs once per request lifecycle
         View::composer(['partials.product-card', 'customer.products.show'], function ($view) {
