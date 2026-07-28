@@ -88,13 +88,13 @@
             <table class="table table-custom">
                 <thead>
                     <tr>
-                        <th>Delivery #</th>
-                        <th>Order</th>
+                        <th class="d-none-mobile">Delivery #</th>
+                        <th class="d-none-mobile">Order</th>
                         <th>Customer</th>
-                        <th>Agent</th>
-                        <th>Tracking</th>
+                        <th class="d-none d-md-table-cell">Agent</th>
+                        <th class="d-none d-md-table-cell">Tracking</th>
                         <th>Status</th>
-                        <th>Date</th>
+                        <th class="d-none-mobile">Date</th>
 
                     </tr>
                 </thead>
@@ -111,8 +111,8 @@
                             ];
                         @endphp
                         <tr>
-                            <td><span class="fw-bold" style="color:var(--gray-500);">SHP-{{ str_pad($delivery->id, 6, '0', STR_PAD_LEFT) }}</span></td>
-                            <td><span class="fw-semibold" style="color:var(--primary);">#{{ $delivery->order_id }}</span></td>
+                            <td class="d-none-mobile"><span class="fw-bold" style="color:var(--gray-500);">SHP-{{ str_pad($delivery->id, 6, '0', STR_PAD_LEFT) }}</span></td>
+                            <td class="d-none-mobile"><span class="fw-semibold" style="color:var(--primary);">#{{ $delivery->order_id }}</span></td>
                             <td>
                                 <div class="d-flex align-items-center gap-2">
                                     <div class="rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width:30px;height:30px;background:var(--primary-50);color:var(--primary);font-size:0.78rem;">
@@ -124,20 +124,20 @@
                                     </div>
                                 </div>
                             </td>
-                            <td>
+                            <td class="d-none d-md-table-cell">
                                 @if($delivery->staff)
                                     <span class="fw-semibold">{{ $delivery->staff->name }}</span>
                                 @else
                                     <span class="badge bg-secondary bg-opacity-10 text-secondary">Unassigned</span>
                                 @endif
                             </td>
-                            <td><span class="font-monospace fw-semibold" style="font-size:0.78rem;">{{ $delivery->tracking_no ?? '-' }}</span></td>
+                            <td class="d-none d-md-table-cell"><span class="font-monospace fw-semibold" style="font-size:0.78rem;">{{ $delivery->tracking_no ?? '-' }}</span></td>
                             <td>
                                 <span class="badge-status {{ $statusColors[$status] ?? 'bg-secondary text-white' }}">
                                     {{ str_replace('_', ' ', ucfirst($delivery->delivery_status)) }}
                                 </span>
                             </td>
-                            <td><span class="text-muted" style="font-size:0.8rem;">{{ $delivery->delivery_date ?? 'Pending' }}</span></td>
+                            <td class="d-none-mobile"><span class="text-muted" style="font-size:0.8rem;">{{ $delivery->delivery_date ?? 'Pending' }}</span></td>
 
                         </tr>
                     @empty

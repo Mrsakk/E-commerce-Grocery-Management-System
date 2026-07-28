@@ -27,7 +27,7 @@
                         <th class="d-none d-sm-table-cell">Phone</th>
                         <th class="d-none d-lg-table-cell">Email</th>
                         <th>Products</th>
-                        <th>Status</th>
+                        <th class="d-none-mobile">Status</th>
                         <th class="text-end">Actions</th>
                     </tr>
                 </thead>
@@ -40,7 +40,7 @@
                             <td class="d-none d-sm-table-cell">{{ $s->phone ?? '-' }}</td>
                             <td class="d-none d-lg-table-cell"><span class="text-muted">{{ $s->email ?? '-' }}</span></td>
                             <td><span class="badge-status bg-info text-white">{{ $s->products_count }}</span></td>
-                            <td>
+                            <td class="d-none-mobile">
                                 <span class="badge-status bg-{{ $s->status == 'active' ? 'success' : 'secondary' }} text-white">
                                     <i class="bi bi-circle-fill" style="font-size:0.35rem;"></i> {{ ucfirst($s->status) }}
                                 </span>

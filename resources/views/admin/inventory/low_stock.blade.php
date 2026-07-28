@@ -23,9 +23,9 @@
                     <tr>
                         <th>#</th>
                         <th>Product</th>
-                        <th>Category</th>
+                        <th class="d-none d-md-table-cell">Category</th>
                         <th>Stock Qty</th>
-                        <th>Reorder Level</th>
+                        <th class="d-none-mobile">Reorder Level</th>
 
                     </tr>
                 </thead>
@@ -34,9 +34,9 @@
                         <tr>
                             <td><span class="fw-bold" style="color:var(--gray-500);">#{{ $inv->id }}</span></td>
                             <td><span class="fw-semibold">{{ $inv->product->product_name ?? 'N/A' }}</span></td>
-                            <td><span class="badge bg-secondary bg-opacity-10 text-secondary px-2 py-1" style="font-size:0.75rem;">{{ $inv->product->category->category_name ?? 'N/A' }}</span></td>
+                            <td class="d-none d-md-table-cell"><span class="badge bg-secondary bg-opacity-10 text-secondary px-2 py-1" style="font-size:0.75rem;">{{ $inv->product->category->category_name ?? 'N/A' }}</span></td>
                             <td><span class="badge bg-danger rounded-pill px-2 py-1 fw-bold">{{ $inv->qty_in_stock }}</span></td>
-                            <td><span class="fw-semibold" style="color:var(--gray-600);">{{ $inv->reorder_level }}</span></td>
+                            <td class="d-none-mobile"><span class="fw-semibold" style="color:var(--gray-600);">{{ $inv->reorder_level }}</span></td>
 
                         </tr>
                     @empty

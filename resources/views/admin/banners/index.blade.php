@@ -26,20 +26,20 @@
             <table class="table table-custom align-middle">
                 <thead>
                     <tr>
-                        <th style="width:60px;">ID</th>
+                        <th class="d-none-mobile" style="width:60px;">ID</th>
                         <th>Preview</th>
                         <th>Title (EN)</th>
-                        <th>Title (KM)</th>
-                        <th>Badge</th>
-                        <th>Sort</th>
-                        <th>Status</th>
+                        <th class="d-none d-md-table-cell">Title (KM)</th>
+                        <th class="d-none d-md-table-cell">Badge</th>
+                        <th class="d-none-mobile">Sort</th>
+                        <th class="d-none-mobile">Status</th>
                         <th class="text-end">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse($banners as $banner)
                         <tr>
-                            <td><span class="fw-bold" style="color:var(--gray-500);">#{{ $banner->id }}</span></td>
+                            <td class="d-none-mobile"><span class="fw-bold" style="color:var(--gray-500);">#{{ $banner->id }}</span></td>
                             <td>
                                 @if($banner->image_path)
                                     <img src="{{ asset($banner->image_path) }}" alt="Banner" class="rounded border" style="width: 110px; height: 45px; object-fit: cover;">
@@ -50,16 +50,16 @@
                                 @endif
                             </td>
                             <td><span class="fw-semibold">{{ $banner->title_en }}</span></td>
-                            <td><span class="text-muted">{{ $banner->title_km ?? 'N/A' }}</span></td>
-                            <td>
+                            <td class="d-none d-md-table-cell"><span class="text-muted">{{ $banner->title_km ?? 'N/A' }}</span></td>
+                            <td class="d-none d-md-table-cell">
                                 @if($banner->badge_en)
                                     <span class="badge bg-warning text-dark">{{ $banner->badge_en }}</span>
                                 @else
                                     <span class="text-muted">-</span>
                                 @endif
                             </td>
-                            <td><span class="badge bg-light text-dark border fw-bold">{{ $banner->sort_order }}</span></td>
-                            <td>
+                            <td class="d-none-mobile"><span class="badge bg-light text-dark border fw-bold">{{ $banner->sort_order }}</span></td>
+                            <td class="d-none-mobile">
                                 <span class="badge-status bg-{{ $banner->status == 'active' ? 'success' : 'secondary' }} text-white">
                                     <i class="bi bi-circle-fill" style="font-size:0.35rem;"></i> {{ ucfirst($banner->status) }}
                                 </span>

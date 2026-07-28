@@ -398,8 +398,8 @@
         }
         
         .action-btns .btn-action {
-            width: 34px;
-            height: 34px;
+            width: 38px;
+            height: 38px;
             border-radius: var(--radius-xs);
             border: none;
             display: inline-flex;
@@ -659,6 +659,13 @@
             .page-content { padding: 20px 14px; }
             .sidebar-collapse-toggle { display: none !important; }
 
+            /* Sidebar touch-friendly nav links */
+            .sidebar .nav-link {
+                padding: 12px 16px;
+                min-height: 44px;
+                font-size: 0.9rem;
+            }
+
             /* Page header stacks on tablet */
             .page-header { flex-wrap: wrap; gap: 10px; }
             .page-header-left { flex: 1 1 100%; }
@@ -715,9 +722,12 @@
 
             /* Hide username text in topbar, show only avatar */
             .topbar-right .user-info span { display: none !important; }
-            .topbar-right .user-info { padding: 4px 8px; gap: 6px; }
+            .topbar-right .user-info { padding: 4px 10px; gap: 6px; min-height: 40px; }
             .topbar-right .user-info .bi-chevron-down { display: none; }
-            .topbar-right { gap: 6px; }
+            .topbar-right { gap: 8px; }
+
+            /* Topbar buttons larger for touch */
+            .topbar-right .btn-icon { width: 40px; height: 40px; }
 
             /* Stat cards - 2 columns */
             .row .col-lg-3,
@@ -738,7 +748,7 @@
             .table-custom tbody td { padding: 11px 12px; font-size: 0.8rem; }
 
             /* Action buttons smaller */
-            .action-btns .btn-action { width: 30px; height: 30px; font-size: 0.78rem; }
+            .action-btns .btn-action { width: 36px; height: 36px; font-size: 0.82rem; }
 
             /* Page header fully stacked */
             .page-header { flex-direction: column; align-items: flex-start; gap: 12px; }
@@ -873,7 +883,7 @@
             .table-custom tbody td { padding: 10px 10px; font-size: 0.77rem; }
 
             /* Action buttons tiny */
-            .action-btns .btn-action { width: 28px; height: 28px; font-size: 0.73rem; }
+            .action-btns .btn-action { width: 34px; height: 34px; font-size: 0.78rem; }
             .action-btns { gap: 4px; }
 
             /* Buttons full-width stacked */
@@ -895,8 +905,8 @@
             .page-header-left h4 { font-size: 1rem; }
             .page-header-left p { font-size: 0.78rem; }
 
-            /* Topbar right: hide low stock warning label */
-            .topbar-right .btn-icon { width: 34px; height: 34px; }
+            /* Topbar right: larger buttons for touch */
+            .topbar-right .btn-icon { width: 40px; height: 40px; }
 
             /* Hide language label, show only icon */
             .topbar-right .dropdown button span { display: none; }
@@ -974,8 +984,8 @@
             .stat-card .stat-number { font-size: 1.2rem; }
             .stat-card .stat-icon { width: 30px; height: 30px; font-size: 0.85rem; border-radius: 6px; }
 
-            /* Topbar buttons smaller */
-            .topbar-right .btn-icon { width: 30px; height: 30px; font-size: 0.82rem; }
+            /* Topbar buttons always touch-friendly */
+            .topbar-right .btn-icon { width: 38px; height: 38px; font-size: 0.82rem; }
 
             /* Cards */
             .card-custom .card-header { padding: 10px 12px; font-size: 0.8rem; }
@@ -998,7 +1008,7 @@
 
             /* Action buttons minimal gap */
             .action-btns { gap: 3px; }
-            .action-btns .btn-action { width: 26px; height: 26px; font-size: 0.7rem; }
+            .action-btns .btn-action { width: 32px; height: 32px; font-size: 0.74rem; }
 
             /* Alert compact */
             .alert-success-custom,
@@ -1186,6 +1196,149 @@
         .swal2-popup { border-radius: var(--radius-md) !important; font-family: 'Inter', sans-serif !important; }
         .swal2-title { font-weight: 700 !important; font-size: 1.1rem !important; }
         .swal2-html-container { font-size: 0.88rem !important; }
+
+        /* ===== MOBILE BOTTOM NAVIGATION ===== */
+        .bottom-nav {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255,255,255,0.96);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-top: 1px solid var(--gray-200);
+            z-index: 1050;
+            padding: 6px 0;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.06);
+        }
+        .bottom-nav .nav-item { flex: 1; }
+        .bottom-nav .nav-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2px;
+            padding: 6px 0;
+            color: var(--gray-500) !important;
+            text-decoration: none;
+            font-size: 0.62rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            border-radius: 8px;
+            min-height: 48px;
+        }
+        .bottom-nav .nav-link i {
+            font-size: 1.15rem;
+            transition: all 0.2s ease;
+        }
+        .bottom-nav .nav-link.active,
+        .bottom-nav .nav-link:hover {
+            color: var(--primary) !important;
+            background: var(--primary-50);
+        }
+        .bottom-nav .nav-link.active i {
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 992px) {
+            .bottom-nav { display: flex; }
+            body { padding-bottom: 68px; }
+        }
+
+        /* ===== BACK TO TOP BUTTON ===== */
+        .back-to-top {
+            position: fixed;
+            bottom: 84px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            cursor: pointer;
+            z-index: 1040;
+            box-shadow: 0 4px 12px rgba(16,185,129,0.35);
+            transition: all 0.3s ease;
+        }
+        .back-to-top:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(16,185,129,0.45); }
+        .back-to-top.show { display: flex; }
+        @media (max-width: 992px) { .back-to-top { bottom: 80px; right: 16px; width: 42px; height: 42px; } }
+
+        /* ===== ENHANCED MOBILE TOUCH TARGETS ===== */
+        @media (max-width: 992px) {
+            .btn-xs { min-height: 36px; font-size: 0.76rem !important; padding: 6px 14px !important; }
+            .d-flex.flex-wrap.gap-2.mb-4 .btn-xs { min-height: 38px; }
+            .topbar-right .btn-icon { min-width: 40px; min-height: 40px; }
+            .topbar-right .dropdown .btn-icon { min-width: 40px; min-height: 40px; }
+        }
+        @media (max-width: 576px) {
+            .btn-xs { min-height: 38px; font-size: 0.74rem !important; padding: 7px 12px !important; border-radius: 8px; }
+            .topbar-right .btn-icon { width: 40px; height: 40px; }
+        }
+
+        /* ===== ENHANCED MOBILE TABLE COLUMNS ===== */
+        @media (max-width: 576px) {
+            .d-none-mobile { display: none !important; }
+        }
+        @media (max-width: 768px) {
+            .d-none-tablet { display: none !important; }
+        }
+
+        /* ===== ENHANCED MOBILE STAT CARDS ===== */
+        @media (max-width: 576px) {
+            .stat-card .stat-body { padding: 14px 12px; }
+            .stat-card .stat-number { font-size: 1.3rem; letter-spacing: -0.5px; }
+            .stat-card .stat-label { font-size: 0.68rem; letter-spacing: 0.3px; }
+            .stat-card .stat-icon { width: 32px; height: 32px; font-size: 0.9rem; border-radius: 8px; }
+        }
+
+        /* ===== ENHANCED MOBILE FILTER PILLS ===== */
+        @media (max-width: 576px) {
+            .d-flex.flex-wrap.gap-2 { gap: 6px !important; }
+            .btn-xs.rounded-pill {
+                min-height: 34px;
+                font-size: 0.72rem !important;
+                padding: 5px 12px !important;
+                border-radius: 20px !important;
+            }
+        }
+
+        /* ===== MOBILE WELCOME BAR ===== */
+        @media (max-width: 576px) {
+            .welcome-bar-mobile-stack {
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                gap: 12px !important;
+            }
+            .welcome-bar-mobile-stack .d-flex.gap-2 {
+                width: 100%;
+            }
+            .welcome-bar-mobile-stack .d-flex.gap-2 .btn {
+                flex: 1;
+                min-height: 40px;
+            }
+        }
+
+        /* ===== MOBILE CHART LEGEND ===== */
+        @media (max-width: 576px) {
+            .chart-legend-row .col-3 { flex: 0 0 50%; max-width: 50%; }
+        }
+
+        /* ===== SMOOTH SCROLL ===== */
+        html { scroll-behavior: smooth; }
+
+        /* ===== SCROLLBAR TOUCH IMPROVEMENTS ===== */
+        @media (hover: none) and (pointer: coarse) {
+            .action-btns .btn-action { min-width: 40px; min-height: 40px; }
+            .btn-xs { min-height: 36px; }
+            .topbar-right .btn-icon { min-width: 42px; min-height: 42px; }
+        }
     </style>
 </head>
 <body>
@@ -1470,6 +1623,47 @@
 
     @yield('modals')
 
+    <!-- Mobile Bottom Navigation Bar -->
+    <nav class="bottom-nav d-lg-none">
+        <ul class="nav justify-content-around mb-0">
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}" href="{{ route('admin.dashboard') }}">
+                    <i class="bi bi-speedometer2"></i>
+                    <span>{{ __('messages.dashboard') ?? 'Dashboard' }}</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('admin.orders.*') ? 'active' : '' }}" href="{{ route('admin.orders.index') }}">
+                    <i class="bi bi-cart-check"></i>
+                    <span>{{ __('messages.orders') ?? 'Orders' }}</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('admin.products.*') ? 'active' : '' }}" href="{{ route('admin.products.index') }}">
+                    <i class="bi bi-box"></i>
+                    <span>{{ __('messages.products') ?? 'Products' }}</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('admin.inventory.*') ? 'active' : '' }}" href="{{ route('admin.inventory.index') }}">
+                    <i class="bi bi-boxes"></i>
+                    <span>{{ __('messages.stock') ?? 'Stock' }}</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('admin.settings.*') ? 'active' : '' }}" href="{{ route('admin.settings.index') }}">
+                    <i class="bi bi-gear"></i>
+                    <span>{{ __('messages.settings') ?? 'Settings' }}</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+        <i class="bi bi-chevron-up"></i>
+    </button>
+
     <script>
         function toggleSidebar() {
             document.getElementById('sidebar').classList.toggle('show');
@@ -1487,6 +1681,35 @@
             if (localStorage.getItem('sidebarCollapsed') === 'true') {
                 document.getElementById('sidebar').classList.add('collapsed');
                 document.body.classList.add('sidebar-collapsed');
+            }
+        })();
+
+        /* ===== BACK TO TOP BUTTON ===== */
+        (function() {
+            var btn = document.getElementById('backToTop');
+            if (btn) {
+                window.addEventListener('scroll', function() {
+                    if (window.scrollY > 300) {
+                        btn.classList.add('show');
+                    } else {
+                        btn.classList.remove('show');
+                    }
+                });
+            }
+        })();
+
+        /* ===== CLOSE SIDEBAR ON MOBILE WHEN CLICKING A LINK ===== */
+        (function() {
+            var sidebar = document.getElementById('sidebar');
+            if (sidebar) {
+                sidebar.querySelectorAll('.nav-link').forEach(function(link) {
+                    link.addEventListener('click', function() {
+                        if (window.innerWidth <= 992) {
+                            sidebar.classList.remove('show');
+                            document.getElementById('sidebarOverlay').classList.remove('show');
+                        }
+                    });
+                });
             }
         })();
 

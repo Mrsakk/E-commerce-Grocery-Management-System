@@ -82,10 +82,10 @@
                     <tr>
                         <th style="width:30px;"></th>
                         <th>Title</th>
-                        <th>Message</th>
-                        <th>Type</th>
-                        <th>User</th>
-                        <th>Date</th>
+                        <th class="d-none d-md-table-cell">Message</th>
+                        <th class="d-none d-md-table-cell">Type</th>
+                        <th class="d-none-mobile">User</th>
+                        <th class="d-none-mobile">Date</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -98,14 +98,14 @@
                                 @endif
                             </td>
                             <td class="fw-semibold">{{ $notification->title }}</td>
-                            <td><span class="text-muted" style="font-size:0.85rem;">{{ Str::limit($notification->message, 60) }}</span></td>
-                            <td>
+                            <td class="d-none d-md-table-cell"><span class="text-muted" style="font-size:0.85rem;">{{ Str::limit($notification->message, 60) }}</span></td>
+                            <td class="d-none d-md-table-cell">
                                 <span class="badge bg-secondary bg-opacity-10 text-secondary rounded-pill px-2 py-1" style="font-size:0.7rem;">
                                     {{ str_replace('_', ' ', $notification->type) }}
                                 </span>
                             </td>
-                            <td>{{ $notification->user->name ?? 'N/A' }}</td>
-                            <td><span class="text-muted" style="font-size:0.8rem;">{{ $notification->created_at->format('d/m/Y H:i') }}</span></td>
+                            <td class="d-none-mobile">{{ $notification->user->name ?? 'N/A' }}</td>
+                            <td class="d-none-mobile"><span class="text-muted" style="font-size:0.8rem;">{{ $notification->created_at->format('d/m/Y H:i') }}</span></td>
                             <td>
                                 <div class="action-btns">
                                     @if(!$notification->is_read)

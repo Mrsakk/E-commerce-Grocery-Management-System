@@ -139,7 +139,7 @@
                 <div style="position: relative; height: 230px; width: 100%;" class="mb-3">
                     <canvas id="statusChart"></canvas>
                 </div>
-                <div class="row g-2 mt-2 text-center" style="font-size: 0.8rem;">
+                <div class="row g-2 mt-2 text-center chart-legend-row" style="font-size: 0.8rem;">
                     <div class="col-3">
                         <div class="fw-bold text-success">{{ $deliveredOrders }}</div>
                         <span class="text-muted">{{ __('messages.delivered') }}</span>
@@ -175,7 +175,7 @@
                 <div class="table-responsive">
                     <table class="table table-custom">
                         <thead>
-                            <tr><th>#</th><th>{{ __('messages.customer') }}</th><th>{{ __('messages.amount') }}</th><th>{{ __('messages.status') }}</th><th>{{ __('messages.date') }}</th></tr>
+                            <tr><th>#</th><th>{{ __('messages.customer') }}</th><th>{{ __('messages.amount') }}</th><th>{{ __('messages.status') }}</th><th class="d-none-mobile">{{ __('messages.date') }}</th></tr>
                         </thead>
                         <tbody>
                             @php 
@@ -202,7 +202,7 @@
                                             {{ ucfirst($order->order_status) }}
                                         </span>
                                     </td>
-                                    <td><span class="text-muted" style="font-size:0.8rem;">{{ $order->created_at->format('d/m/Y') }}</span></td>
+                                    <td class="d-none-mobile"><span class="text-muted" style="font-size:0.8rem;">{{ $order->created_at->format('d/m/Y') }}</span></td>
                                 </tr>
                             @empty
                                 <tr><td colspan="5" class="text-center text-muted py-4">{{ __('messages.no_orders_found') }}</td></tr>

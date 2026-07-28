@@ -45,20 +45,20 @@
             <table class="table table-custom">
                 <thead>
                     <tr>
-                        <th>#</th>
+                        <th class="d-none-mobile">#</th>
                         <th>Name</th>
-                        <th>Email</th>
-                        <th>Phone</th>
+                        <th class="d-none d-md-table-cell">Email</th>
+                        <th class="d-none d-md-table-cell">Phone</th>
                         <th>Role</th>
-                        <th>Status</th>
-                        <th>Joined</th>
+                        <th class="d-none-mobile">Status</th>
+                        <th class="d-none-mobile">Joined</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse($users as $user)
                         <tr>
-                            <td><span class="fw-bold" style="color:var(--gray-500);">#{{ $user->id }}</span></td>
+                            <td class="d-none-mobile"><span class="fw-bold" style="color:var(--gray-500);">#{{ $user->id }}</span></td>
                             <td>
                                 <div class="d-flex align-items-center gap-2">
                                     <div class="rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width:32px;height:32px;background:var(--primary-50);color:var(--primary);font-size:0.8rem;">
@@ -67,8 +67,8 @@
                                     <span class="fw-semibold">{{ $user->name }}</span>
                                 </div>
                             </td>
-                            <td><span class="text-muted">{{ $user->email }}</span></td>
-                            <td>{{ $user->phone ?? 'N/A' }}</td>
+                            <td class="d-none d-md-table-cell"><span class="text-muted">{{ $user->email }}</span></td>
+                            <td class="d-none d-md-table-cell">{{ $user->phone ?? 'N/A' }}</td>
                             <td>
                                 @php
                                     $roleColors = ['admin' => 'danger', 'staff' => 'warning', 'delivery' => 'info', 'customer' => 'success'];
@@ -77,12 +77,12 @@
                                     {{ ucfirst($user->role) }}
                                 </span>
                             </td>
-                            <td>
+                            <td class="d-none-mobile">
                                 <span class="badge rounded-pill px-2 py-1 {{ $user->status === 'active' ? 'bg-success' : 'bg-secondary' }}">
                                     {{ ucfirst($user->status ?? 'active') }}
                                 </span>
                             </td>
-                            <td><span class="text-muted">{{ $user->created_at->format('d/m/Y') }}</span></td>
+                            <td class="d-none-mobile"><span class="text-muted">{{ $user->created_at->format('d/m/Y') }}</span></td>
                             <td>
                                 <div class="action-btns">
                                     <a href="{{ route('admin.users.show', $user->id) }}" class="btn-action btn-view" title="View">

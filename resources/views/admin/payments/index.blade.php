@@ -62,13 +62,13 @@
             <table class="table table-custom">
                 <thead>
                     <tr>
-                        <th>TXN #</th>
-                        <th>Order</th>
+                        <th class="d-none-mobile">TXN #</th>
+                        <th class="d-none d-md-table-cell">Order</th>
                         <th>Customer</th>
                         <th>Amount</th>
-                        <th>Method</th>
-                        <th>Status</th>
-                        <th>Date</th>
+                        <th class="d-none d-sm-table-cell">Method</th>
+                        <th class="d-none-mobile">Status</th>
+                        <th class="d-none-mobile">Date</th>
                         <th class="text-end">Actions</th>
                     </tr>
                 </thead>
@@ -83,8 +83,8 @@
                             elseif ($method == 'cod') $methodBadge = 'bg-dark text-white';
                         @endphp
                         <tr>
-                            <td><span class="fw-bold" style="color:var(--gray-500);">TXN-{{ str_pad($payment->id, 6, '0', STR_PAD_LEFT) }}</span></td>
-                            <td><span class="fw-semibold" style="color:var(--primary);">#{{ $payment->order_id }}</span></td>
+                            <td class="d-none-mobile"><span class="fw-bold" style="color:var(--gray-500);">TXN-{{ str_pad($payment->id, 6, '0', STR_PAD_LEFT) }}</span></td>
+                            <td class="d-none d-md-table-cell"><span class="fw-semibold" style="color:var(--primary);">#{{ $payment->order_id }}</span></td>
                             <td>
                                 <div class="d-flex align-items-center gap-2">
                                     <div class="rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width:30px;height:30px;background:var(--primary-50);color:var(--primary);font-size:0.78rem;">
@@ -97,13 +97,13 @@
                                 </div>
                             </td>
                             <td><span class="fw-bold" style="color:var(--gray-900);">${{ number_format($payment->amount, 2) }}</span></td>
-                            <td><span class="badge {{ $methodBadge }} px-2 py-1 text-uppercase fw-semibold" style="font-size:0.72rem;">{{ $payment->payment_method }}</span></td>
-                            <td>
+                            <td class="d-none d-sm-table-cell"><span class="badge {{ $methodBadge }} px-2 py-1 text-uppercase fw-semibold" style="font-size:0.72rem;">{{ $payment->payment_method }}</span></td>
+                            <td class="d-none-mobile">
                                 <span class="badge-status bg-{{ $payment->payment_status == 'paid' ? 'success' : 'warning' }} text-white">
                                     <i class="bi {{ $payment->payment_status == 'paid' ? 'bi-check-circle-fill' : 'bi-clock-fill' }}" style="font-size:0.65rem;"></i> {{ ucfirst($payment->payment_status) }}
                                 </span>
                             </td>
-                            <td><span class="text-muted" style="font-size:0.8rem;">{{ $payment->created_at->format('d/m/Y') }}</span></td>
+                            <td class="d-none-mobile"><span class="text-muted" style="font-size:0.8rem;">{{ $payment->created_at->format('d/m/Y') }}</span></td>
                             <td class="text-end">
                                 <div class="action-btns justify-content-end">
                                     @if($payment->payment_status != 'paid')

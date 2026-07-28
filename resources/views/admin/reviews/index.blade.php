@@ -49,34 +49,34 @@
             <table class="table table-custom">
                 <thead>
                     <tr>
-                        <th>#</th>
+                        <th class="d-none-mobile">#</th>
                         <th>Product</th>
-                        <th>Customer</th>
+                        <th class="d-none d-md-table-cell">Customer</th>
                         <th>Rating</th>
-                        <th>Review</th>
-                        <th>Status</th>
-                        <th>Date</th>
+                        <th class="d-none d-md-table-cell">Review</th>
+                        <th class="d-none-mobile">Status</th>
+                        <th class="d-none-mobile">Date</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse($reviews as $review)
                         <tr>
-                            <td><span class="fw-bold" style="color:var(--gray-500);">#{{ $review->id }}</span></td>
+                            <td class="d-none-mobile"><span class="fw-bold" style="color:var(--gray-500);">#{{ $review->id }}</span></td>
                             <td class="fw-semibold">{{ $review->product->product_name ?? 'Deleted' }}</td>
-                            <td>{{ $review->customer->user->name ?? 'N/A' }}</td>
+                            <td class="d-none d-md-table-cell">{{ $review->customer->user->name ?? 'N/A' }}</td>
                             <td>
                                 @for($i = 1; $i <= 5; $i++)
                                     <i class="bi bi-star{{ $i <= $review->rating ? '-fill text-warning' : ' text-muted' }}" style="font-size:0.75rem;"></i>
                                 @endfor
                             </td>
-                            <td><span class="text-muted" style="font-size:0.85rem;">{{ Str::limit($review->review_text, 80) }}</span></td>
-                            <td>
+                            <td class="d-none d-md-table-cell"><span class="text-muted" style="font-size:0.85rem;">{{ Str::limit($review->review_text, 80) }}</span></td>
+                            <td class="d-none-mobile">
                                 <span class="badge rounded-pill px-2 py-1 {{ $review->is_approved ? 'bg-success' : 'bg-secondary' }}">
                                     {{ $review->is_approved ? 'Approved' : 'Hidden' }}
                                 </span>
                             </td>
-                            <td><span class="text-muted">{{ $review->created_at->format('d/m/Y') }}</span></td>
+                            <td class="d-none-mobile"><span class="text-muted">{{ $review->created_at->format('d/m/Y') }}</span></td>
                             <td>
                                 <div class="action-btns">
                                     <a href="{{ route('admin.reviews.show', $review->id) }}" class="btn-action btn-view" title="View">

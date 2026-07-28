@@ -58,27 +58,27 @@
             <table class="table table-custom">
                 <thead class="sticky-top" style="background:var(--gray-50);">
                     <tr>
-                        <th>Date</th>
+                        <th class="d-none-mobile">Date</th>
                         <th>User</th>
                         <th>Action</th>
-                        <th>Model</th>
-                        <th>Description</th>
-                        <th>IP</th>
+                        <th class="d-none d-md-table-cell">Model</th>
+                        <th class="d-none d-md-table-cell">Description</th>
+                        <th class="d-none-mobile">IP</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse($logs as $log)
                         <tr>
-                            <td><span class="text-muted" style="font-size:0.82rem;">{{ $log->created_at->format('d/m/Y H:i') }}</span></td>
+                            <td class="d-none-mobile"><span class="text-muted" style="font-size:0.82rem;">{{ $log->created_at->format('d/m/Y H:i') }}</span></td>
                             <td><span class="fw-semibold">{{ $log->user->name ?? 'System' }}</span></td>
                             <td>
                                 <span class="badge-status bg-{{ $log->action == 'created' ? 'success' : ($log->action == 'updated' ? 'info' : ($log->action == 'deleted' ? 'danger' : 'warning')) }} text-white">
                                     {{ $log->action }}
                                 </span>
                             </td>
-                            <td><span class="text-muted">{{ $log->model_type }} #{{ $log->model_id }}</span></td>
-                            <td><span class="text-muted">{{ Str::limit($log->description, 80) }}</span></td>
-                            <td><small class="text-muted">{{ $log->ip_address ?? '-' }}</small></td>
+                            <td class="d-none d-md-table-cell"><span class="text-muted">{{ $log->model_type }} #{{ $log->model_id }}</span></td>
+                            <td class="d-none d-md-table-cell"><span class="text-muted">{{ Str::limit($log->description, 80) }}</span></td>
+                            <td class="d-none-mobile"><small class="text-muted">{{ $log->ip_address ?? '-' }}</small></td>
                         </tr>
                     @empty
                         <tr>

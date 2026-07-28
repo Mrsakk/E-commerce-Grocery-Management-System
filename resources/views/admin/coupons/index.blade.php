@@ -23,12 +23,12 @@
                     <tr>
                         <th>#</th>
                         <th>Code</th>
-                        <th>Type</th>
+                        <th class="d-none d-md-table-cell">Type</th>
                         <th>Value</th>
-                        <th>Min Order</th>
-                        <th>Uses</th>
-                        <th>Period</th>
-                        <th>Status</th>
+                        <th class="d-none d-md-table-cell">Min Order</th>
+                        <th class="d-none-mobile">Uses</th>
+                        <th class="d-none d-md-table-cell">Period</th>
+                        <th class="d-none-mobile">Status</th>
 
                     </tr>
                 </thead>
@@ -41,12 +41,12 @@
                         <tr>
                             <td><span class="fw-bold" style="color:var(--gray-500);">#{{ $c->id }}</span></td>
                             <td><span class="fw-bold text-uppercase" style="letter-spacing:1px;">{{ $c->code }}</span></td>
-                            <td><span class="badge bg-secondary bg-opacity-10 text-secondary px-2 py-1 fw-semibold" style="font-size:0.75rem;">{{ ucfirst($c->discount_type) }}</span></td>
+                            <td class="d-none d-md-table-cell"><span class="badge bg-secondary bg-opacity-10 text-secondary px-2 py-1 fw-semibold" style="font-size:0.75rem;">{{ ucfirst($c->discount_type) }}</span></td>
                             <td><span class="fw-bold" style="color:var(--gray-900);">{{ $c->discount_type == 'percentage' ? $c->discount_value . '%' : '$' . number_format($c->discount_value, 2) }}</span></td>
-                            <td>${{ number_format($c->min_order_amount, 2) }}</td>
-                            <td><span class="fw-semibold">{{ $c->used_count }}{{ $c->usage_limit ? '/' . $c->usage_limit : '' }}</span></td>
-                            <td><small class="text-muted">{{ $c->start_date->format('d/m/Y') }} - {{ $c->end_date->format('d/m/Y') }}</small></td>
-                            <td>
+                            <td class="d-none d-md-table-cell">${{ number_format($c->min_order_amount, 2) }}</td>
+                            <td class="d-none-mobile"><span class="fw-semibold">{{ $c->used_count }}{{ $c->usage_limit ? '/' . $c->usage_limit : '' }}</span></td>
+                            <td class="d-none d-md-table-cell"><small class="text-muted">{{ $c->start_date->format('d/m/Y') }} - {{ $c->end_date->format('d/m/Y') }}</small></td>
+                            <td class="d-none-mobile">
                                 <span class="badge-status bg-{{ $expired ? 'secondary' : ($c->status == 'active' ? 'success' : 'danger') }} text-white">
                                     <i class="bi bi-circle-fill" style="font-size:0.35rem;"></i> {{ $expired ? 'Expired' : ucfirst($c->status) }}
                                 </span>

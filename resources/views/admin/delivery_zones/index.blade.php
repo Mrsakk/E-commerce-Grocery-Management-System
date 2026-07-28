@@ -27,24 +27,24 @@
             <table class="table table-custom">
                 <thead>
                     <tr>
-                        <th>#</th>
+                        <th class="d-none-mobile">#</th>
                         <th>Name</th>
-                        <th>Description</th>
-                        <th>Radius</th>
+                        <th class="d-none d-md-table-cell">Description</th>
+                        <th class="d-none-mobile">Radius</th>
                         <th>Delivery Fee</th>
-                        <th>Status</th>
+                        <th class="d-none-mobile">Status</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse($zones as $zone)
                         <tr>
-                            <td><span class="fw-bold" style="color:var(--gray-500);">#{{ $zone->id }}</span></td>
+                            <td class="d-none-mobile"><span class="fw-bold" style="color:var(--gray-500);">#{{ $zone->id }}</span></td>
                             <td class="fw-semibold">{{ $zone->name }}</td>
-                            <td><span class="text-muted" style="font-size:0.85rem;">{{ Str::limit($zone->description, 50) }}</span></td>
-                            <td>{{ $zone->radius_km }} km</td>
+                            <td class="d-none d-md-table-cell"><span class="text-muted" style="font-size:0.85rem;">{{ Str::limit($zone->description, 50) }}</span></td>
+                            <td class="d-none-mobile">{{ $zone->radius_km }} km</td>
                             <td class="fw-bold" style="color:var(--primary);">${{ number_format($zone->delivery_fee, 2) }}</td>
-                            <td>
+                            <td class="d-none-mobile">
                                 <form action="{{ route('admin.delivery-zones.toggle_status', $zone->id) }}" method="POST" class="d-inline">
                                     @csrf @method('PATCH')
                                     <button type="submit" class="badge rounded-pill px-2 py-1 border-0 {{ $zone->is_active ? 'bg-success' : 'bg-secondary' }}" style="cursor:pointer;">

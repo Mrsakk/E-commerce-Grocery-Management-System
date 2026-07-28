@@ -67,11 +67,11 @@
                     <tr>
                         <th>#</th>
                         <th>Product</th>
-                        <th>Category</th>
+                        <th class="d-none d-md-table-cell">Category</th>
                         <th>Stock</th>
-                        <th>Reorder</th>
-                        <th>Condition</th>
-                        <th>Last Update</th>
+                        <th class="d-none-mobile">Reorder</th>
+                        <th class="d-none-mobile">Condition</th>
+                        <th class="d-none-mobile">Last Update</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -90,7 +90,7 @@
                                     <small class="text-muted d-block" style="font-size:0.7rem;">{{ $inv->product->brand }}</small>
                                 @endif
                             </td>
-                            <td><span class="badge bg-secondary bg-opacity-10 text-secondary px-2 py-1 fw-semibold" style="font-size:0.75rem;">{{ $inv->product->category->category_name ?? 'N/A' }}</span></td>
+                            <td class="d-none d-md-table-cell"><span class="badge bg-secondary bg-opacity-10 text-secondary px-2 py-1 fw-semibold" style="font-size:0.75rem;">{{ $inv->product->category->category_name ?? 'N/A' }}</span></td>
                             <td>
                                 <div style="max-width:100px;">
                                     <span class="fw-bold" style="color:var(--gray-900);">{{ $qty }}</span>
@@ -101,8 +101,8 @@
                                     </div>
                                 </div>
                             </td>
-                            <td><span class="fw-semibold" style="color:var(--gray-600);">{{ $reorder }}</span></td>
-                            <td>
+                            <td class="d-none-mobile"><span class="fw-semibold" style="color:var(--gray-600);">{{ $reorder }}</span></td>
+                            <td class="d-none-mobile">
                                 @if($qty == 0)
                                     <span class="badge bg-danger rounded-pill px-2 py-1">Out of Stock</span>
                                 @elseif($isLow)
@@ -111,7 +111,7 @@
                                     <span class="badge bg-success rounded-pill px-2 py-1">Healthy</span>
                                 @endif
                             </td>
-                            <td><span class="text-muted" style="font-size:0.8rem;">{{ $inv->last_updated ? $inv->last_updated->format('d/m/Y') : 'N/A' }}</span></td>
+                            <td class="d-none-mobile"><span class="text-muted" style="font-size:0.8rem;">{{ $inv->last_updated ? $inv->last_updated->format('d/m/Y') : 'N/A' }}</span></td>
                             <td>
                                 <div class="action-btns">
                                     <a href="{{ route('admin.inventory.stock_in', $inv->id) }}" class="btn-action btn-view" title="Stock In">

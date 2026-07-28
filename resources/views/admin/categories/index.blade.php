@@ -23,9 +23,9 @@
                     <tr>
                         <th>#</th>
                         <th>{{ __('messages.name') }}</th>
-                        <th>{{ __('messages.description') }}</th>
+                        <th class="d-none d-md-table-cell">{{ __('messages.description') }}</th>
                         <th>{{ __('messages.products') }}</th>
-                        <th>{{ __('messages.status') }}</th>
+                        <th class="d-none-mobile">{{ __('messages.status') }}</th>
                         <th class="text-end">{{ __('messages.actions') }}</th>
                     </tr>
                 </thead>
@@ -34,9 +34,9 @@
                         <tr>
                             <td><span class="fw-bold" style="color:var(--gray-500);">#{{ $cat->id }}</span></td>
                             <td><span class="fw-semibold">{{ $cat->category_name }}</span></td>
-                            <td><span class="text-muted">{{ Str::limit($cat->description, 45) }}</span></td>
+                            <td class="d-none d-md-table-cell"><span class="text-muted">{{ Str::limit($cat->description, 45) }}</span></td>
                             <td><span class="badge-status bg-info text-white">{{ $cat->products_count }}</span></td>
-                            <td>
+                            <td class="d-none-mobile">
                                 <span class="badge-status bg-{{ $cat->status == 'active' ? 'success' : 'secondary' }} text-white">
                                     <i class="bi bi-circle-fill" style="font-size:0.35rem;"></i> {{ ucfirst($cat->status) }}
                                 </span>

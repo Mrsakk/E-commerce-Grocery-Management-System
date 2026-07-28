@@ -42,32 +42,32 @@
             <table class="table table-custom">
                 <thead>
                     <tr>
-                        <th>#</th>
+                        <th class="d-none-mobile">#</th>
                         <th>Order No</th>
                         <th>Supplier</th>
-                        <th>Items</th>
+                        <th class="d-none d-md-table-cell">Items</th>
                         <th>Total</th>
-                        <th>Status</th>
-                        <th>Ordered By</th>
-                        <th>Date</th>
+                        <th class="d-none-mobile">Status</th>
+                        <th class="d-none d-md-table-cell">Ordered By</th>
+                        <th class="d-none-mobile">Date</th>
 
                     </tr>
                 </thead>
                 <tbody>
                     @forelse($purchaseOrders as $po)
                         <tr>
-                            <td><span class="fw-bold" style="color:var(--gray-500);">#{{ $po->id }}</span></td>
+                            <td class="d-none-mobile"><span class="fw-bold" style="color:var(--gray-500);">#{{ $po->id }}</span></td>
                             <td><span class="fw-semibold">{{ $po->order_number }}</span></td>
                             <td>{{ $po->supplier->supplier_name ?? 'N/A' }}</td>
-                            <td><span class="badge bg-secondary bg-opacity-10 text-secondary fw-semibold" style="font-size:0.75rem;">{{ $po->items->count() }} items</span></td>
+                            <td class="d-none d-md-table-cell"><span class="badge bg-secondary bg-opacity-10 text-secondary fw-semibold" style="font-size:0.75rem;">{{ $po->items->count() }} items</span></td>
                             <td><span class="fw-bold" style="color:var(--gray-900);">${{ number_format($po->total_amount, 2) }}</span></td>
-                            <td>
+                            <td class="d-none-mobile">
                                 <span class="badge-status bg-{{ $po->status == 'received' ? 'success' : ($po->status == 'ordered' ? 'info' : ($po->status == 'partial' ? 'warning' : ($po->status == 'cancelled' ? 'danger' : 'secondary'))) }} text-white">
                                     {{ ucfirst($po->status) }}
                                 </span>
                             </td>
-                            <td><span class="text-muted">{{ $po->orderedBy->name ?? 'N/A' }}</span></td>
-                            <td><span class="text-muted" style="font-size:0.82rem;">{{ $po->created_at->format('d/m/Y') }}</span></td>
+                            <td class="d-none d-md-table-cell"><span class="text-muted">{{ $po->orderedBy->name ?? 'N/A' }}</span></td>
+                            <td class="d-none-mobile"><span class="text-muted" style="font-size:0.82rem;">{{ $po->created_at->format('d/m/Y') }}</span></td>
 
                         </tr>
                     @empty
