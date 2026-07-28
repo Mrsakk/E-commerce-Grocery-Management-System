@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Models\Wishlist;
 use Illuminate\Database\Connectors\PostgresConnector;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
