@@ -51,13 +51,21 @@ class ProductController extends Controller
             'reorder_level' => 'required|integer|min:0',
         ]);
 
-        $data = $request->except(['image', 'qty_in_stock', 'reorder_level']);
+        $data = [
+            'category_id' => $request->input('category_id'),
+            'product_name' => $request->input('product_name'),
+            'description' => $request->input('description'),
+            'price' => $request->input('price'),
+            'unit' => $request->input('unit'),
+            'brand' => $request->input('brand'),
+            'expiry_date' => $request->input('expiry_date'),
+            'status' => $request->input('status'),
+        ];
 
-        if ($request->hasFile('image')) {
-            try {
-                $data['image'] = $request->file('image')->store('images/products', 'public');
-            } catch (\Exception $e) {
-                // File storage may fail on read-only environments (e.g. Vercel)
+        if ($request->hasFile('image') && $request->file('image')->isValid()) {
+            $path = $request->file('image')->store('images/products', 'public');
+            if ($path) {
+                $data['image'] = $path;
             }
         }
 
@@ -115,16 +123,29 @@ class ProductController extends Controller
         ]);
 
         $product = Product::with('inventory')->findOrFail($id);
-        $data = $request->except(['image', 'qty_in_stock', 'reorder_level']);
 
-        if ($request->hasFile('image')) {
+        $data = [
+            'category_id' => $request->input('category_id'),
+            'product_name' => $request->input('product_name'),
+            'description' => $request->input('description'),
+            'price' => $request->input('price'),
+            'unit' => $request->input('unit'),
+            'brand' => $request->input('brand'),
+            'expiry_date' => $request->input('expiry_date'),
+            'status' => $request->input('status'),
+        ];
+
+        if ($request->hasFile('image') && $request->file('image')->isValid()) {
             try {
                 if ($product->image && str_starts_with($product->image, 'data:')) {
                     // base64 images don't need file deletion
                 } elseif ($product->image && File::exists(storage_path('app/public/'.$product->image))) {
                     File::delete(storage_path('app/public/'.$product->image));
                 }
-                $data['image'] = $request->file('image')->store('images/products', 'public');
+                $path = $request->file('image')->store('images/products', 'public');
+                if ($path) {
+                    $data['image'] = $path;
+                }
             } catch (\Exception $e) {
                 // On Vercel, Storage operations fail; keep old image path
             }
