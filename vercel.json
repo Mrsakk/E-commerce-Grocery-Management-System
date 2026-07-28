@@ -33,7 +33,6 @@
         "SESSION_DRIVER": "database",
         "SESSION_CONNECTION": "pgsql",
         "SESSION_SECURE_COOKIE": "true",
-        "SESSION_DOMAIN": ".vercel.app",
         "SESSION_SAME_SITE": "lax",
         "LOG_CHANNEL": "stderr",
         "DB_CONNECTION": "pgsql",

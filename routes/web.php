@@ -52,7 +52,7 @@ Route::get('/category/{id}', [ProductController::class, 'category'])->name('prod
 Route::get('/search', [ProductController::class, 'search'])->name('products.search')->middleware('throttle:60,1');
 Route::get('/search-suggestions', [ProductController::class, 'suggestions'])->name('products.suggestions')->middleware('throttle:60,1');
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth'])->group(function () {
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
     Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
     Route::patch('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
@@ -62,12 +62,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/cart/coupon/remove', [CartController::class, 'removeCoupon'])->name('cart.coupon.remove');
 });
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth'])->group(function () {
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
     Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
 });
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth'])->group(function () {
     Route::get('/my-orders', [OrderController::class, 'index'])->name('customer.orders.index');
     Route::get('/my-orders/{id}', [OrderController::class, 'show'])->name('customer.orders.show');
     Route::patch('/my-orders/{id}/cancel', [OrderController::class, 'cancel'])->name('customer.orders.cancel');
@@ -82,7 +82,7 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::middleware(['auth', 'verified'])->prefix('settings')->name('settings.')->group(function () {
+Route::middleware(['auth'])->prefix('settings')->name('settings.')->group(function () {
     Route::get('/', [SettingsController::class, 'index'])->name('index');
     Route::put('/profile', [SettingsController::class, 'updateProfile'])->name('profile.update');
     Route::put('/preferences', [SettingsController::class, 'updatePreferences'])->name('preferences.update');
@@ -93,7 +93,7 @@ Route::middleware(['auth', 'verified'])->prefix('settings')->name('settings.')->
     Route::put('/accessibility', [SettingsController::class, 'updateAccessibility'])->name('accessibility.update');
 });
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth'])->group(function () {
     Route::get('/addresses', [AddressController::class, 'index'])->name('addresses.index');
     Route::post('/addresses', [AddressController::class, 'store'])->name('addresses.store');
     Route::get('/addresses/{address}/edit', [AddressController::class, 'edit'])->name('addresses.edit');
@@ -114,7 +114,7 @@ Route::get('/dashboard', function () {
     return redirect()->route('home');
 })->middleware(['auth'])->name('dashboard');
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth'])->group(function () {
     Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
     Route::post('/wishlist/add', [WishlistController::class, 'add'])->name('wishlist.add');
     Route::delete('/wishlist/{id}', [WishlistController::class, 'remove'])->name('wishlist.remove');
@@ -209,7 +209,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/notifications/read-all', [NotificationController::class, 'markAllRead'])->name('notifications.mark_all_read');
 });
 
-Route::middleware(['auth', 'role:delivery', 'verified'])->prefix('delivery')->name('delivery.')->group(function () {
+Route::middleware(['auth', 'role:delivery'])->prefix('delivery')->name('delivery.')->group(function () {
     Route::get('/dashboard', [DeliveryDashboardController::class, 'index'])->name('dashboard');
     Route::get('/{id}', [DeliveryDashboardController::class, 'show'])->name('show');
     Route::patch('/{id}/status', [DeliveryDashboardController::class, 'updateStatus'])->name('update_status');

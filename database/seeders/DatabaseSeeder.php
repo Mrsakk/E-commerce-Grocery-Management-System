@@ -2,11 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-use App\Models\Customer;
 use App\Models\Category;
-use App\Models\Product;
+use App\Models\Customer;
 use App\Models\Inventory;
+use App\Models\Product;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('password'),
             'role' => 'admin',
             'status' => 'active',
+            'email_verified_at' => now(),
         ]);
 
         $customerUser = User::create([
@@ -32,6 +33,7 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('password'),
             'role' => 'customer',
             'status' => 'active',
+            'email_verified_at' => now(),
         ]);
 
         Customer::create([
@@ -48,6 +50,7 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('password'),
             'role' => 'delivery',
             'status' => 'active',
+            'email_verified_at' => now(),
         ]);
 
         User::create([
@@ -57,6 +60,7 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('password'),
             'role' => 'delivery',
             'status' => 'active',
+            'email_verified_at' => now(),
         ]);
 
         $vegetables = Category::create(['category_name' => 'Fresh Vegetables', 'description' => 'Fresh and organic vegetables', 'status' => 'active']);
