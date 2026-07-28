@@ -1129,7 +1129,7 @@
                     <div class="dropdown user-dropdown">
                         <button class="btn btn-light rounded-circle p-0 border-0 d-flex align-items-center justify-content-center" type="button" data-bs-toggle="dropdown" style="width: 40px; height: 40px;">
                             @if(Auth::user()->avatar)
-                                <img src="{{ asset(Auth::user()->avatar) }}" alt="{{ Auth::user()->name }}" class="rounded-circle" style="width: 34px; height: 34px; object-fit: cover;">
+                                <img src="{{ str_starts_with(Auth::user()->avatar, 'data:') ? Auth::user()->avatar : asset(Auth::user()->avatar) }}" alt="{{ Auth::user()->name }}" class="rounded-circle" style="width: 34px; height: 34px; object-fit: cover;">
                             @else
                                 <div class="rounded-circle navbar-avatar text-white d-flex align-items-center justify-content-center fw-bold" style="width:34px; height:34px; font-size:0.9rem;">
                                     {{ substr(Auth::user()->name, 0, 1) }}

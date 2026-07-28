@@ -109,15 +109,13 @@ class ProfileController extends Controller
         $user = auth()->user();
 
         if ($request->hasFile('avatar')) {
-            if ($user->avatar) {
-                $oldPath = storage_path('app/public/'.$user->avatar);
-                if (file_exists($oldPath)) {
-                    Storage::disk('public')->delete($user->avatar);
-                }
+            if ($user->avatar && ! str_starts_with($user->avatar, 'data:')) {
+                Storage::disk('public')->delete($user->avatar);
             }
 
-            $path = $request->file('avatar')->store('uploads/avatars', 'public');
-            $user->update(['avatar' => $path]);
+            $file = $request->file('avatar');
+            $dataUrl = 'data:'.$file->getMimeType().';base64,'.base64_encode($file->get());
+            $user->update(['avatar' => $dataUrl]);
 
             return redirect()->route('profile.index')->with('success', 'Profile picture updated successfully!');
         }
@@ -130,7 +128,9 @@ class ProfileController extends Controller
         $user = auth()->user();
 
         if ($user->avatar) {
-            Storage::disk('public')->delete($user->avatar);
+            if (! str_starts_with($user->avatar, 'data:')) {
+                Storage::disk('public')->delete($user->avatar);
+            }
             $user->update(['avatar' => null]);
 
             return redirect()->route('profile.index')->with('success', 'Profile picture deleted successfully!');

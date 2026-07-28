@@ -21,7 +21,7 @@
     "env": {
         "APP_ENV": "production",
         "APP_KEY": "base64:6VsVtSBXUN9rM0dJp3zELxNy27yUNPuej1FntusqH+s=",
-        "APP_DEBUG": "true",
+        "APP_DEBUG": "false",
         "APP_URL": "https://e-commerce-grocery-management-syste.vercel.app",
         "APP_CONFIG_CACHE": "/tmp/config.php",
         "APP_EVENTS_CACHE": "/tmp/events.php",
@@ -29,7 +29,7 @@
         "APP_ROUTES_CACHE": "/tmp/routes.php",
         "APP_SERVICES_CACHE": "/tmp/services.php",
         "VIEW_COMPILED_PATH": "/tmp/views",
-        "CACHE_STORE": "database",
+        "CACHE_STORE": "array",
         "SESSION_DRIVER": "database",
         "SESSION_CONNECTION": "pgsql",
         "SESSION_SECURE_COOKIE": "true",

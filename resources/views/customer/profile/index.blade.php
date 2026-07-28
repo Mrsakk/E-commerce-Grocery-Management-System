@@ -30,7 +30,7 @@
                 <div class="col-md-auto text-center text-md-start">
                     <div class="profile-avatar-wrap" style="width: 100px; height: 100px; border-radius: 50%; border: 4px solid rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center; background: white; margin: 0 auto; box-shadow: var(--shadow-md); position: relative; overflow: visible;">
                         @if($user->avatar)
-                            <img src="{{ asset($user->avatar) }}" alt="{{ $user->name }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                            <img src="{{ str_starts_with($user->avatar, 'data:') ? $user->avatar : asset($user->avatar) }}" alt="{{ $user->name }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
                         @else
                             <i class="bi bi-person-fill text-success fs-1"></i>
                         @endif
