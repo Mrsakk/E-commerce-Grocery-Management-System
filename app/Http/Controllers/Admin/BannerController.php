@@ -48,11 +48,20 @@ class BannerController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            $validated['image_path'] = $request->file('image')->store('uploads/banners', 'public');
+            try {
+                $validated['image_path'] = $request->file('image')->store('uploads/banners', 'public');
+            } catch (\Exception $e) {
+                // File storage may fail on read-only environments (e.g. Vercel)
+            }
         }
 
         unset($validated['image']);
-        Banner::create($validated);
+
+        try {
+            Banner::create($validated);
+        } catch (\Exception $e) {
+            return back()->withInput()->with('error', 'Failed to create banner: '.$e->getMessage());
+        }
 
         return redirect()->route('admin.banners.index')
             ->with('success', 'Banner created successfully.');
@@ -87,14 +96,23 @@ class BannerController extends Controller
         $banner = Banner::findOrFail($id);
 
         if ($request->hasFile('image')) {
-            if ($banner->image_path && File::exists(storage_path('app/public/'.$banner->image_path))) {
-                File::delete(storage_path('app/public/'.$banner->image_path));
+            try {
+                if ($banner->image_path && File::exists(storage_path('app/public/'.$banner->image_path))) {
+                    File::delete(storage_path('app/public/'.$banner->image_path));
+                }
+                $validated['image_path'] = $request->file('image')->store('uploads/banners', 'public');
+            } catch (\Exception $e) {
+                // File storage may fail on read-only environments (e.g. Vercel)
             }
-            $validated['image_path'] = $request->file('image')->store('uploads/banners', 'public');
         }
 
         unset($validated['image']);
-        $banner->update($validated);
+
+        try {
+            $banner->update($validated);
+        } catch (\Exception $e) {
+            return back()->withInput()->with('error', 'Failed to update banner: '.$e->getMessage());
+        }
 
         return redirect()->route('admin.banners.index')
             ->with('success', 'Banner updated successfully.');
@@ -104,11 +122,21 @@ class BannerController extends Controller
     {
         $banner = Banner::findOrFail($id);
 
-        if ($banner->image_path && File::exists(storage_path('app/public/'.$banner->image_path))) {
-            File::delete(storage_path('app/public/'.$banner->image_path));
+        if ($banner->image_path) {
+            try {
+                if (File::exists(storage_path('app/public/'.$banner->image_path))) {
+                    File::delete(storage_path('app/public/'.$banner->image_path));
+                }
+            } catch (\Exception $e) {
+                // File deletion may fail on read-only environments
+            }
         }
 
-        $banner->delete();
+        try {
+            $banner->delete();
+        } catch (\Exception $e) {
+            return back()->with('error', 'Failed to delete banner: '.$e->getMessage());
+        }
 
         return redirect()->route('admin.banners.index')
             ->with('success', 'Banner deleted successfully.');
