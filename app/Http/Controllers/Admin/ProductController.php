@@ -10,7 +10,6 @@ use App\Services\ActivityLogger;
 use App\Services\NotificationService;
 use App\Services\StockMovementService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 
 class ProductController extends Controller
@@ -62,20 +61,16 @@ class ProductController extends Controller
             }
         }
 
-        $product = DB::transaction(function () use ($request, $data) {
-            $product = Product::create($data);
+        $product = Product::create($data);
 
-            Inventory::create([
-                'product_id' => $product->id,
-                'qty_in_stock' => $request->qty_in_stock,
-                'reorder_level' => $request->reorder_level,
-                'last_updated' => now(),
-            ]);
+        Inventory::create([
+            'product_id' => $product->id,
+            'qty_in_stock' => $request->qty_in_stock,
+            'reorder_level' => $request->reorder_level,
+            'last_updated' => now(),
+        ]);
 
-            StockMovementService::stockIn($product->id, $request->qty_in_stock, null, null, 'Initial stock');
-
-            return $product;
-        });
+        StockMovementService::stockIn($product->id, $request->qty_in_stock, null, null, 'Initial stock');
 
         try {
             ActivityLogger::log('created', $product, "Created product: {$product->product_name}");
@@ -137,23 +132,21 @@ class ProductController extends Controller
 
         $oldData = $product->toArray();
 
-        DB::transaction(function () use ($product, $data, $request) {
-            $product->update($data);
+        $product->update($data);
 
-            if ($product->inventory) {
-                $oldStock = $product->inventory->qty_in_stock;
-                $product->inventory->update([
-                    'qty_in_stock' => $request->qty_in_stock,
-                    'reorder_level' => $request->reorder_level,
-                    'last_updated' => now(),
-                ]);
+        if ($product->inventory) {
+            $oldStock = $product->inventory->qty_in_stock;
+            $product->inventory->update([
+                'qty_in_stock' => $request->qty_in_stock,
+                'reorder_level' => $request->reorder_level,
+                'last_updated' => now(),
+            ]);
 
-                if ($request->qty_in_stock != $oldStock) {
-                    $diff = $request->qty_in_stock - $oldStock;
-                    StockMovementService::adjustment($product->id, $diff, "Stock adjusted from {$oldStock} to {$request->qty_in_stock}");
-                }
+            if ($request->qty_in_stock != $oldStock) {
+                $diff = $request->qty_in_stock - $oldStock;
+                StockMovementService::adjustment($product->id, $diff, "Stock adjusted from {$oldStock} to {$request->qty_in_stock}");
             }
-        });
+        }
 
         try {
             ActivityLogger::log('updated', $product, "Updated product: {$product->product_name}", $oldData, $product->toArray());
