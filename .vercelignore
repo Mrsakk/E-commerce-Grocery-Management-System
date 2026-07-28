@@ -2,12 +2,15 @@
 .env.backup
 .env.production
 node_modules
+vendor
 tests
 .github
-*.md
 .git
 .gitattributes
 .editorconfig
 .phpunit.result.cache
 .npmrc
-dist
+*.md
+.vscode
+.idea
+.vercel
