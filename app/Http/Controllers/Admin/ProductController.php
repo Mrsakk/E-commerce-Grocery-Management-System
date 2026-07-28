@@ -105,12 +105,16 @@ class ProductController extends Controller
         $data = $request->except(['image', 'qty_in_stock', 'reorder_level']);
 
         if ($request->hasFile('image')) {
-            if ($product->image && str_starts_with($product->image, 'data:')) {
-                // base64 images don't need file deletion
-            } elseif ($product->image && File::exists(storage_path('app/public/images/products/'.$product->image))) {
-                File::delete(storage_path('app/public/images/products/'.$product->image));
+            try {
+                if ($product->image && str_starts_with($product->image, 'data:')) {
+                    // base64 images don't need file deletion
+                } elseif ($product->image && File::exists(storage_path('app/public/images/products/'.$product->image))) {
+                    File::delete(storage_path('app/public/images/products/'.$product->image));
+                }
+                $data['image'] = $request->file('image')->store('images/products', 'public');
+            } catch (\Exception $e) {
+                // File storage may fail on read-only environments (e.g. Vercel)
             }
-            $data['image'] = $request->file('image')->store('images/products', 'public');
         }
 
         $oldData = $product->toArray();
@@ -130,10 +134,18 @@ class ProductController extends Controller
             }
         }
 
-        ActivityLogger::log('updated', $product, "Updated product: {$product->product_name}", $oldData, $product->toArray());
+        try {
+            ActivityLogger::log('updated', $product, "Updated product: {$product->product_name}", $oldData, $product->toArray());
+        } catch (\Exception $e) {
+            // Activity logging should not block the update
+        }
 
         if ($request->qty_in_stock <= $request->reorder_level) {
-            NotificationService::lowStockAlert($product->product_name, $request->qty_in_stock);
+            try {
+                NotificationService::lowStockAlert($product->product_name, $request->qty_in_stock);
+            } catch (\Exception $e) {
+                // Notification failure should not block the update
+            }
         }
 
         return redirect()->route('admin.products.index')

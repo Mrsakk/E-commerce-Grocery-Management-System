@@ -30,7 +30,7 @@
         "APP_SERVICES_CACHE": "/tmp/services.php",
         "VIEW_COMPILED_PATH": "/tmp/views",
         "CACHE_STORE": "array",
-        "SESSION_DRIVER": "database",
+        "SESSION_DRIVER": "cookie",
         "SESSION_CONNECTION": "pgsql",
         "SESSION_SECURE_COOKIE": "true",
         "SESSION_SAME_SITE": "lax",
