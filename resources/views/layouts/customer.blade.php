@@ -1502,9 +1502,9 @@
                     }
                 })
                 .then(response => {
-                    return response.json().catch(() => {
-                        showToast('Something went wrong. Please try again.', 'danger');
-                        return null;
+                    return response.text().then(text => {
+                        try { return JSON.parse(text); }
+                        catch(e) { return null; }
                     });
                 })
                 .then(data => {
