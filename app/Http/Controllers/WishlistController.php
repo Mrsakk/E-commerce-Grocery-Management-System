@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Wishlist;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class WishlistController extends Controller
 {
@@ -34,7 +33,6 @@ class WishlistController extends Controller
             return redirect()->route('products.index')->with('error', 'Please complete your profile first.');
         }
 
-        DB::beginTransaction();
         try {
             $wishlist = Wishlist::where('customer_id', $customer->id)
                 ->where('product_id', $request->product_id)
@@ -43,7 +41,6 @@ class WishlistController extends Controller
             if ($wishlist) {
                 $wishlist->delete();
                 $wishlistCount = Wishlist::where('customer_id', $customer->id)->count();
-                DB::commit();
                 if ($request->ajax()) {
                     return response()->json([
                         'success' => true,
@@ -60,7 +57,6 @@ class WishlistController extends Controller
                     'product_id' => $request->product_id,
                 ]);
                 $wishlistCount = Wishlist::where('customer_id', $customer->id)->count();
-                DB::commit();
                 if ($request->ajax()) {
                     return response()->json([
                         'success' => true,
@@ -73,7 +69,6 @@ class WishlistController extends Controller
                 return back()->with('success', 'Product added to wishlist!');
             }
         } catch (\Exception $e) {
-            DB::rollBack();
             if ($request->ajax()) {
                 return response()->json(['success' => false, 'message' => 'Failed to update wishlist.']);
             }
