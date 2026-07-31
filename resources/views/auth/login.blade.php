@@ -503,21 +503,7 @@
                 <span>Sign in with Google</span>
             </a>
 
-            <!-- Demo Accounts -->
-            <div class="demo-section">
-                <div class="demo-label">Quick Demo Login</div>
-                <div class="demo-btns">
-                    <button type="button" class="demo-btn" onclick="quickLogin('admin@admin.com','password')">
-                        <i class="bi bi-shield-lock"></i> Admin
-                    </button>
-                    <button type="button" class="demo-btn" onclick="quickLogin('customer@customer.com','password')">
-                        <i class="bi bi-person"></i> Customer
-                    </button>
-                    <button type="button" class="demo-btn" onclick="quickLogin('delivery@delivery.com','password')">
-                        <i class="bi bi-truck"></i> Delivery
-                    </button>
-                </div>
-            </div>
+
 
             <div class="register-link">
                 Don't have an account? <a href="{{ route('register') }}">Create one here</a>
@@ -526,13 +512,5 @@
 
     </div>
 </div>
-
-<script>
-    function quickLogin(email, password) {
-        document.querySelector('input[name="email"]').value = email;
-        document.querySelector('input[name="password"]').value = password;
-        document.querySelector('form').submit();
-    }
-</script>
 </body>
 </html>
